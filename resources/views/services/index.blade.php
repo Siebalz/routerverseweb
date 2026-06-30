@@ -6,7 +6,7 @@
 <style>
 /* Tab active pill */
 .cat-tab { transition: all 0.15s ease; }
-.cat-tab.active { background: #4F46E5; color: #fff !important; box-shadow: 0 4px 14px rgba(79,70,229,0.25); }
+.cat-tab.active { background: #4F46E5 !important; color: #fff !important; box-shadow: 0 4px 14px rgba(79,70,229,0.25); }
 .cat-tab:not(.active):hover { background: #f0f1ff; color: #4F46E5 !important; }
 
 /* Service card */
@@ -25,6 +25,17 @@
 
 /* Textarea */
 textarea:focus { outline: none; border-color: #4F46E5 !important; box-shadow: 0 0 0 3px rgba(79,70,229,0.12) !important; }
+
+/* Tabs: scrollable on mobile, no wrap so it doesn't get cramped */
+.cat-tabs-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+.cat-tabs-wrap::-webkit-scrollbar { display: none; }
+
+/* Modal: allow scrolling on short / mobile screens */
+.modal-box { max-height: 92vh; overflow-y: auto; }
+
+@media (max-width: 480px) {
+    .modal-box { border-radius: 16px; }
+}
 </style>
 @endpush
 
@@ -37,23 +48,23 @@ textarea:focus { outline: none; border-color: #4F46E5 !important; box-shadow: 0 
 
 @section('content')
 
-<div class="min-h-screen bg-[#F8F9FC] p-5">
+<div class="min-h-screen bg-[#F8F9FC] p-4 sm:p-6 lg:p-8">
 
     {{-- Page header --}}
-    <div class="mb-6">
-        <h4 class="font-extrabold text-gray-900 text-xl mb-1">Layanan &amp; Paket</h4>
-        <p class="text-gray-400 text-sm mb-0">Pilih paket atau setting yang Anda butuhkan — tim kami akan menghubungi Anda untuk konfirmasi setelah pemesanan.</p>
+    <div class="mb-5 sm:mb-6">
+        <h4 class="font-extrabold text-gray-900 text-lg sm:text-xl mb-1">Layanan &amp; Paket</h4>
+        <p class="text-gray-400 text-xs sm:text-sm mb-0 leading-relaxed">Pilih paket atau setting yang Anda butuhkan — tim kami akan menghubungi Anda untuk konfirmasi setelah pemesanan.</p>
     </div>
 
     {{-- Category tabs --}}
-    <div class="flex flex-wrap gap-2 mb-7">
+    <div class="cat-tabs-wrap flex flex-nowrap sm:flex-wrap gap-2 mb-6 sm:mb-7 -mx-4 px-4 sm:mx-0 sm:px-0">
         @foreach ($catalog as $key => $cat)
             <button
                 onclick="switchTab('{{ $key }}')"
                 id="tab-{{ $key }}"
-                class="cat-tab flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-gray-500 bg-white border border-gray-100 shadow-sm {{ $loop->first ? 'active' : '' }}"
+                class="cat-tab flex-shrink-0 flex items-center gap-2 px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-gray-500 bg-white border border-gray-100 shadow-sm whitespace-nowrap {{ $loop->first ? 'active' : '' }}"
             >
-                <span class="w-6 h-6 rounded-lg flex items-center justify-center text-xs"
+                <span class="w-5 h-5 sm:w-6 sm:h-6 rounded-lg flex items-center justify-center text-xs flex-shrink-0"
                       style="background: {{ $cat['color'] }}20; color: {{ $cat['color'] }};">
                     <i class="bi {{ $cat['icon'] }}"></i>
                 </span>
@@ -67,13 +78,13 @@ textarea:focus { outline: none; border-color: #4F46E5 !important; box-shadow: 0 
         <div id="section-{{ $key }}" class="cat-section {{ $loop->first ? 'active' : '' }}">
 
             {{-- Section label --}}
-            <div class="flex items-center gap-3 mb-5">
-                <div class="w-10 h-10 rounded-xl flex items-center justify-center text-white text-base flex-shrink-0"
+            <div class="flex items-center gap-3 mb-4 sm:mb-5">
+                <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center text-white text-sm sm:text-base flex-shrink-0"
                      style="background: {{ $cat['color'] }};">
                     <i class="bi {{ $cat['icon'] }}"></i>
                 </div>
                 <div>
-                    <h5 class="font-bold text-gray-900 mb-0">{{ $cat['label'] }}</h5>
+                    <h5 class="font-bold text-gray-900 text-sm sm:text-base mb-0">{{ $cat['label'] }}</h5>
                     @if (!empty($cat['desc']))
                         <p class="text-gray-400 text-xs mb-0">{{ $cat['desc'] }}</p>
                     @endif
@@ -81,27 +92,27 @@ textarea:focus { outline: none; border-color: #4F46E5 !important; box-shadow: 0 
             </div>
 
             {{-- Service cards grid --}}
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-4">
                 @foreach ($cat['items'] as $item)
-                    <div class="svc-card bg-white border border-gray-100 rounded-2xl p-5 flex flex-col shadow-sm">
+                    <div class="svc-card bg-white border border-gray-100 rounded-2xl p-4 sm:p-5 flex flex-col shadow-sm">
 
                         {{-- Top: name + price --}}
                         <div class="mb-3">
-                            <p class="font-bold text-gray-900 text-base mb-1">{{ $item['name'] }}</p>
-                            <p class="font-extrabold text-indigo-600 text-lg mb-0">{{ $item['price'] }}</p>
+                            <p class="font-bold text-gray-900 text-sm sm:text-base mb-1 leading-snug">{{ $item['name'] }}</p>
+                            <p class="font-extrabold text-indigo-600 text-base sm:text-lg mb-0">{{ $item['price'] }}</p>
                         </div>
 
                         {{-- Divider --}}
                         <div class="border-t border-gray-100 mb-3"></div>
 
                         {{-- Description --}}
-                        <p class="text-gray-400 text-sm leading-relaxed flex-1 mb-4">{{ $item['desc'] }}</p>
+                        <p class="text-gray-400 text-xs sm:text-sm leading-relaxed flex-1 mb-4">{{ $item['desc'] }}</p>
 
                         {{-- CTA --}}
                         <button
                             type="button"
                             onclick="openOrderModal('{{ $key }}', {{ json_encode($item['name']) }}, {{ json_encode($item['price']) }})"
-                            class="w-full py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold transition-colors flex items-center justify-center gap-2"
+                            class="w-full py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-semibold transition-colors flex items-center justify-center gap-2"
                         >
                             <i class="bi bi-cart-check"></i> Pesan Sekarang
                         </button>
@@ -116,34 +127,34 @@ textarea:focus { outline: none; border-color: #4F46E5 !important; box-shadow: 0 
 
 {{-- ══ ORDER MODAL — 3 Tab: Form Pesanan + QRIS + Transfer BCA ══════════════ --}}
 <div class="modal-backdrop-custom" id="orderModal" onclick="closeModalOnBackdrop(event)">
-    <div class="modal-box" style="max-width:480px;">
+    <div class="modal-box" style="max-width:480px;width:100%;">
 
         {{-- Header --}}
-        <div class="flex items-center justify-between px-6 pt-6 pb-0">
-            <div>
+        <div class="flex items-center justify-between px-5 sm:px-6 pt-5 sm:pt-6 pb-0">
+            <div class="min-w-0 pr-3">
                 <h5 class="font-bold text-gray-900 text-base mb-0" id="modalTitle">Pesan Layanan</h5>
-                <p class="text-xs text-gray-400 mt-0.5 mb-0" id="modalSubtitle">–</p>
+                <p class="text-xs text-gray-400 mt-0.5 mb-0 truncate" id="modalSubtitle">–</p>
             </div>
             <button type="button" onclick="closeModal()"
-                    class="w-8 h-8 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-400 flex items-center justify-center transition-colors border-0">
+                    class="w-8 h-8 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-400 flex items-center justify-center transition-colors border-0 flex-shrink-0">
                 <i class="bi bi-x-lg text-sm"></i>
             </button>
         </div>
 
         {{-- Paket info bar --}}
-        <div class="mx-6 mt-4 bg-indigo-50 border border-indigo-100 rounded-xl px-4 py-3 flex items-center justify-between">
-            <div>
+        <div class="mx-5 sm:mx-6 mt-4 bg-indigo-50 border border-indigo-100 rounded-xl px-4 py-3 flex items-center justify-between gap-3">
+            <div class="min-w-0">
                 <p class="text-[10px] font-semibold text-indigo-400 uppercase tracking-wide mb-0.5">Paket</p>
-                <p class="font-bold text-gray-900 text-sm mb-0" id="orderPreviewName">–</p>
+                <p class="font-bold text-gray-900 text-sm mb-0 truncate" id="orderPreviewName">–</p>
             </div>
-            <div class="text-right">
+            <div class="text-right flex-shrink-0">
                 <p class="text-[10px] font-semibold text-indigo-400 uppercase tracking-wide mb-0.5">Harga</p>
                 <p class="font-extrabold text-indigo-600 text-base mb-0" id="orderPreviewPrice">–</p>
             </div>
         </div>
 
         {{-- Tab switcher --}}
-        <div class="flex gap-2 px-6 mt-4">
+        <div class="flex gap-2 px-5 sm:px-6 mt-4">
             <button onclick="switchOrderTab('form')" id="tabForm"
                     class="order-tab-btn flex-1 py-2 rounded-xl text-sm font-semibold transition-all border border-indigo-600 bg-indigo-600 text-white flex items-center justify-center gap-1.5">
                 <i class="bi bi-send"></i> Pesan Dulu
@@ -164,7 +175,7 @@ textarea:focus { outline: none; border-color: #4F46E5 !important; box-shadow: 0 
         </div>
 
         {{-- TAB: Form Pesanan --}}
-        <div id="panelForm" class="px-6 py-5">
+        <div id="panelForm" class="px-5 sm:px-6 py-5">
             <form method="POST" action="{{ route('services.store') }}" id="orderForm">
                 @csrf
                 <input type="hidden" name="category"     id="orderCategory">
@@ -199,7 +210,7 @@ textarea:focus { outline: none; border-color: #4F46E5 !important; box-shadow: 0 
 
         {{-- TAB: QRIS --}}
         @if($ps->qrisVisible())
-        <div id="panelQris" class="px-6 pb-6" style="display:none;">
+        <div id="panelQris" class="px-5 sm:px-6 pb-6" style="display:none;">
             <div style="background:#FAFAFA;border-radius:18px;padding:16px;text-align:center;margin-bottom:14px;border:1.5px dashed #E6E8F0;">
                 <div style="font-size:10.5px;color:#6C7082;font-family:'Geist Mono',monospace;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px;">Scan QR Code</div>
                 <img src="{{ asset('storage/'.$ps->qris_image) }}" alt="QRIS"
@@ -232,7 +243,7 @@ textarea:focus { outline: none; border-color: #4F46E5 !important; box-shadow: 0 
 
         {{-- TAB: Transfer BCA --}}
         @if($ps->bcaVisible())
-        <div id="panelBca" class="px-6 pb-6" style="display:none;">
+        <div id="panelBca" class="px-5 sm:px-6 pb-6" style="display:none;">
             <div style="background:#FAFAFA;border-radius:18px;padding:16px;margin-bottom:14px;border:1.5px dashed #E6E8F0;">
                 <div style="font-size:10.5px;color:#6C7082;font-family:'Geist Mono',monospace;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px;">Transfer ke Rekening</div>
                 <div style="font-size:11px;color:#9CA3AF;text-transform:uppercase;letter-spacing:0.04em;">Bank</div>
