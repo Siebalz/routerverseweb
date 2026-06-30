@@ -117,7 +117,7 @@
 
             {{-- CTA buttons --}}
             <div class="flex flex-wrap gap-3">
-                <a href="https://wa.me/6285173844715?text={{ urlencode('Halo, saya mau beli template: '.$product->name) }}"
+                <a href="https://wa.me/6285173484715?text={{ urlencode('Halo, saya mau beli template: '.$product->name) }}"
                    target="_blank"
                    class="inline-flex items-center gap-2 px-5 py-2.5 bg-[#25d366] hover:bg-[#1ebc59] text-white font-semibold text-sm rounded-xl no-underline transition-colors shadow shadow-green-200">
                     <i class="bi bi-whatsapp"></i> Beli via WhatsApp
@@ -212,7 +212,7 @@
                 <p class="text-gray-400 text-xs leading-relaxed mb-4">
                     {{ $paymentSetting->notes ?: 'Scan QRIS di atas, masukkan nominal sesuai harga produk, lalu kirim bukti transfer ke WhatsApp kami untuk konfirmasi.' }}
                 </p>
-                <a href="https://wa.me/6285173844715?text={{ urlencode('Halo, saya sudah transfer QRIS untuk template: '.$product->name.'. Berikut bukti transfernya.') }}"
+                <a href="https://wa.me/6285173484715?text={{ urlencode('Halo, saya sudah transfer QRIS untuk template: '.$product->name.'. Berikut bukti transfernya.') }}"
                    target="_blank"
                    class="flex items-center justify-center gap-2 w-full py-2.5 bg-[#25d366] hover:bg-[#1ebc59] text-white font-semibold text-sm rounded-xl no-underline transition-colors">
                     <i class="bi bi-whatsapp"></i> Kirim Bukti Transfer
@@ -257,7 +257,7 @@
                 <p class="text-gray-400 text-xs leading-relaxed mb-4">
                     {{ $paymentSetting->notes ?: 'Transfer sesuai nominal di atas ke rekening BCA, lalu kirim bukti transfer ke WhatsApp kami untuk konfirmasi.' }}
                 </p>
-                <a href="https://wa.me/6285173844715?text={{ urlencode('Halo, saya sudah transfer BCA untuk template: '.$product->name.'. Berikut bukti transfernya.') }}"
+                <a href="https://wa.me/6285173484715?text={{ urlencode('Halo, saya sudah transfer BCA untuk template: '.$product->name.'. Berikut bukti transfernya.') }}"
                    target="_blank"
                    class="flex items-center justify-center gap-2 w-full py-2.5 bg-[#25d366] hover:bg-[#1ebc59] text-white font-semibold text-sm rounded-xl no-underline transition-colors">
                     <i class="bi bi-whatsapp"></i> Kirim Bukti Transfer

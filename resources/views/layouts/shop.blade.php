@@ -198,7 +198,7 @@
                         </a>
                         <span class="flex items-center gap-2">
                             <i class="bi bi-whatsapp text-green-400"></i>
-                            <a href="https://wa.me/6285173844715"
+                            <a href="https://wa.me/6285173484715"
                                class="text-green-400 hover:text-green-300 no-underline font-medium transition-colors">
                                 +62 851-7384-4715
                             </a>

@@ -91,7 +91,7 @@
                         <i class="bi bi-bank"></i> Transfer BCA
                     </button>
                 @endif
-                <a href="https://wa.me/6285173844715?text={{ urlencode('Halo Routerverse, saya baru memesan: '.$lastOrder->service_name.' ('.$lastOrder->price_label.'). Mohon info kelanjutannya ya.') }}" target="_blank">
+                <a href="https://wa.me/6285173484715?text={{ urlencode('Halo Routerverse, saya baru memesan: '.$lastOrder->service_name.' ('.$lastOrder->price_label.'). Mohon info kelanjutannya ya.') }}" target="_blank">
                     <i class="bi bi-whatsapp"></i> Chat Sekarang
                 </a>
             </div>
@@ -149,7 +149,7 @@
                             <img src="{{ asset('storage/'.$paymentSetting->qris_image) }}" alt="QRIS" class="img-fluid mb-3" style="max-width: 240px;">
                             <div class="fw-bold mb-1">{{ $order->service_name }} &mdash; {{ $order->price_label }}</div>
                             <p class="text-muted small mb-0">{{ $paymentSetting->notes ?: 'Scan QRIS di atas, masukkan nominal sesuai harga layanan, lalu kirim bukti transfer ke WhatsApp kami untuk konfirmasi.' }}</p>
-                            <a href="https://wa.me/6285173844715?text={{ urlencode('Halo, saya sudah transfer QRIS untuk pesanan: '.$order->service_name.'. Berikut bukti transfernya.') }}"
+                            <a href="https://wa.me/6285173484715?text={{ urlencode('Halo, saya sudah transfer QRIS untuk pesanan: '.$order->service_name.'. Berikut bukti transfernya.') }}"
                                 target="_blank" class="btn btn-success w-100 mt-3">
                                 <i class="bi bi-whatsapp me-1"></i> Kirim Bukti Transfer
                             </a>
@@ -186,7 +186,7 @@
                                 <div class="fw-bold">{{ $paymentSetting->bca_account_name }}</div>
                             </div>
                             <p class="text-muted small mb-0">{{ $paymentSetting->notes ?: 'Transfer sesuai nominal pesanan ke rekening BCA di atas, lalu kirim bukti transfer ke WhatsApp kami untuk konfirmasi.' }}</p>
-                            <a href="https://wa.me/6285173844715?text={{ urlencode('Halo, saya sudah transfer BCA untuk pesanan: '.$order->service_name.'. Berikut bukti transfernya.') }}"
+                            <a href="https://wa.me/6285173484715?text={{ urlencode('Halo, saya sudah transfer BCA untuk pesanan: '.$order->service_name.'. Berikut bukti transfernya.') }}"
                                 target="_blank" class="btn btn-success w-100 mt-3">
                                 <i class="bi bi-whatsapp me-1"></i> Kirim Bukti Transfer
                             </a>

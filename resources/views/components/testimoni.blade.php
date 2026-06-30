@@ -157,7 +157,7 @@
                 Bergabung dengan <strong class="font-semibold text-ink">50+ klien</strong>
                 yang sudah mempercayakan jaringannya ke Routerverse.
             </p>
-            <a href="https://wa.me/6285173844715?text=Halo%20Routerverse%2C%20saya%20mau%20konsultasi%20kebutuhan%20jaringan%20saya"
+            <a href="https://wa.me/6285173484715?text=Halo%20Routerverse%2C%20saya%20mau%20konsultasi%20kebutuhan%20jaringan%20saya"
                target="_blank"
                class="inline-flex items-center gap-2.5 rounded-full bg-indigo px-7 py-3.5 text-[14.5px] font-semibold text-white shadow-card transition hover:bg-indigo-deep">
                 <i class="bi bi-whatsapp" aria-hidden="true"></i>

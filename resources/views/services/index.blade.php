@@ -5,7 +5,7 @@
 @push('styles')
 <style>
 /* Tab active pill */
-.cat-tab { transition: all 0.15s ease; }
+.cat-tab { transition: all 0.15s ease; box-shadow: 0 1px 3px rgba(15,15,40,0.06); }
 .cat-tab.active { background: #4F46E5 !important; color: #fff !important; box-shadow: 0 4px 14px rgba(79,70,229,0.25); }
 .cat-tab:not(.active):hover { background: #f0f1ff; color: #4F46E5 !important; }
 
@@ -338,14 +338,14 @@ function openOrderModal(category, name, price) {
     var waLink = document.getElementById('svcQrisWaLink');
     if (waLink) {
         var msg = encodeURIComponent('Halo Routerverse! Saya sudah bayar paket *' + name + '* (' + price + ') via QRIS. Berikut bukti transfernya:');
-        waLink.href = 'https://wa.me/6285173844715?text=' + msg;
+        waLink.href = 'https://wa.me/6285173484715?text=' + msg;
     }
 
     // Update WA link untuk tab Transfer BCA
     var bcaWaLink = document.getElementById('svcBcaWaLink');
     if (bcaWaLink) {
         var bcaMsg = encodeURIComponent('Halo Routerverse! Saya sudah transfer BCA untuk paket *' + name + '* (' + price + '). Berikut bukti transfernya:');
-        bcaWaLink.href = 'https://wa.me/6285173844715?text=' + bcaMsg;
+        bcaWaLink.href = 'https://wa.me/6285173484715?text=' + bcaMsg;
     }
 
     // Reset ke tab form

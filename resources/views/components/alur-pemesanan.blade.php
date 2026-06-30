@@ -106,7 +106,7 @@
 
                         {{-- Tombol WA hanya di step 1 --}}
                         @if($step['wa_text'])
-                        <a href="https://wa.me/6285173844715?text={{ urlencode($step['wa_text']) }}"
+                        <a href="https://wa.me/6285173484715?text={{ urlencode($step['wa_text']) }}"
                            target="_blank"
                            class="mt-4 inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-[12.5px] font-semibold text-white transition hover:opacity-90"
                            style="background: #25D366;">
@@ -138,7 +138,7 @@
                         <i class="bi bi-grid-1x2"></i>
                         Lihat Semua Layanan
                     </a>
-                    <a href="https://wa.me/6285173844715?text={{ urlencode('Halo Routerverse, saya mau pesan layanan jaringan. Bisa bantu saya?') }}"
+                    <a href="https://wa.me/6285173484715?text={{ urlencode('Halo Routerverse, saya mau pesan layanan jaringan. Bisa bantu saya?') }}"
                        target="_blank"
                        class="inline-flex items-center gap-2 rounded-full border border-white/25 px-7 py-3.5 text-[14.5px] font-semibold text-white transition hover:bg-white/10">
                         <i class="bi bi-whatsapp"></i>

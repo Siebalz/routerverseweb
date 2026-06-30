@@ -176,7 +176,7 @@
                 <i class="bi bi-box-arrow-up-right text-gray-300 text-xs ml-auto flex-shrink-0"></i>
             </a>
 
-            <a href="https://wa.me/6285173844715" target="_blank"
+            <a href="https://wa.me/6285173484715" target="_blank"
                class="quick-action-card flex items-center gap-4 p-4 rounded-xl border border-gray-100 hover:border-indigo-200 hover:bg-indigo-50/40 no-underline block">
                 <div class="w-10 h-10 rounded-xl bg-green-50 text-green-600 flex items-center justify-center text-base flex-shrink-0">
                     <i class="bi bi-whatsapp"></i>

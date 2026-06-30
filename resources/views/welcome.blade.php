@@ -921,7 +921,7 @@
                 <span class="mt-3 inline-block font-mono text-xs text-white/50">@routerverse.id</span>
             </a>
 
-            <a href="https://wa.me/6285173844715?text=Halo%20Routerverse%2C%20saya%20mau%20bertanya" target="_blank"
+            <a href="https://wa.me/6285173484715?text=Halo%20Routerverse%2C%20saya%20mau%20bertanya" target="_blank"
                class="reveal rounded-3xl border border-white/10 bg-white/[0.05] p-8 text-center transition hover:bg-white/[0.10]">
                 <div class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#25D366] text-xl text-white">
                     <i class="bi bi-whatsapp"></i>
@@ -943,7 +943,7 @@
         </div>
 
         <div class="reveal mt-12 text-center">
-            <a href="https://wa.me/6285173844715?text=Halo%20Routerverse%2C%20saya%20mau%20konsultasi" target="_blank"
+            <a href="https://wa.me/6285173484715?text=Halo%20Routerverse%2C%20saya%20mau%20konsultasi" target="_blank"
                class="inline-flex items-center gap-2.5 rounded-full bg-white px-8 py-4 text-[15px] font-semibold text-indigo-dark shadow-card transition hover:bg-white/90">
                 <i class="bi bi-headset"></i> Konsultasi Gratis Sekarang
             </a>
@@ -967,7 +967,7 @@
                     Layanan remote jaringan, server management, dan hosting untuk bisnis, RT/RW Net, &amp; perusahaan.
                 </p>
                 <div class="mt-5 flex gap-3">
-                    @foreach([['bi-instagram','https://instagram.com/routerverse.id','Instagram'],['bi-whatsapp','https://wa.me/6285173844715','WhatsApp'],['bi-globe2','https://routerverse.id','Website']] as $soc)
+                    @foreach([['bi-instagram','https://instagram.com/routerverse.id','Instagram'],['bi-whatsapp','https://wa.me/6285173484715','WhatsApp'],['bi-globe2','https://routerverse.id','Website']] as $soc)
                     <a href="{{ $soc[1] }}" target="_blank" aria-label="{{ $soc[2] }}"
                        class="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 transition hover:border-white/40 hover:text-white">
                         <i class="bi {{ $soc[0] }}"></i>
@@ -1000,7 +1000,7 @@
                 <ul class="mt-4 space-y-3 text-[14px]">
                     <li class="flex items-start gap-2"><i class="bi bi-geo-alt mt-0.5"></i> Dayeuhkolot, Kab. Bandung</li>
                     <li class="flex items-start gap-2"><i class="bi bi-whatsapp mt-0.5"></i>
-                        <a href="https://wa.me/6285173844715" target="_blank" class="transition hover:text-white">+62 851-7384-4715</a>
+                        <a href="https://wa.me/6285173484715" target="_blank" class="transition hover:text-white">+62 851-7384-4715</a>
                     </li>
                     <li class="flex items-start gap-2"><i class="bi bi-envelope mt-0.5"></i>
                         <a href="mailto:iqbalrinaldi098@gmail.com" class="transition hover:text-white">iqbalrinaldi098@gmail.com</a>
@@ -1435,11 +1435,11 @@ function openQrisWelcome(nama, harga) {
 
     var qrisMsg = encodeURIComponent('Halo Routerverse! Saya sudah bayar paket *' + nama + '* (' + harga + ') via QRIS. Berikut bukti transfernya:');
     var wqWaLink = document.getElementById('wqWaLink');
-    if (wqWaLink) wqWaLink.href = 'https://wa.me/6285173844715?text=' + qrisMsg;
+    if (wqWaLink) wqWaLink.href = 'https://wa.me/6285173484715?text=' + qrisMsg;
 
     var bcaMsg = encodeURIComponent('Halo Routerverse! Saya sudah transfer BCA untuk paket *' + nama + '* (' + harga + '). Berikut bukti transfernya:');
     var wqBcaWaLink = document.getElementById('wqBcaWaLink');
-    if (wqBcaWaLink) wqBcaWaLink.href = 'https://wa.me/6285173844715?text=' + bcaMsg;
+    if (wqBcaWaLink) wqBcaWaLink.href = 'https://wa.me/6285173484715?text=' + bcaMsg;
 
     switchWelcomeTab('{{ $paymentSetting->qrisVisible() ? "qris" : "bca" }}');
 
@@ -1462,7 +1462,7 @@ document.addEventListener('keydown', function(e){
 <script>
 function openQrisWelcome(nama, harga) {
     var msg = encodeURIComponent('Halo Routerverse! Saya mau pesan paket *' + nama + '* (' + harga + ')');
-    window.open('https://wa.me/6285173844715?text=' + msg, '_blank');
+    window.open('https://wa.me/6285173484715?text=' + msg, '_blank');
 }
 </script>
 @endif
