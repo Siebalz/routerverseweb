@@ -626,56 +626,105 @@
 
 
 <!-- ═══════════════════════════════════════════
-     BRAND PERANGKAT
+     BRAND PERANGKAT — Infinite Marquee
 ════════════════════════════════════════════ -->
-<section id="perangkat-jaringan" class="bg-white py-24">
-    <div class="mx-auto max-w-6xl px-6 lg:px-8">
-        <div class="reveal mx-auto mb-14 max-w-xl text-center">
-            <h2 class="font-display text-[30px] font-bold tracking-tight text-ink lg:text-[36px]">
-                Mendukung Berbagai Merk Perangkat
-            </h2>
-            <p class="mt-4 text-[16px] leading-[1.7] text-muted">
-                Berpengalaman menangani berbagai brand router, access point, dan switch.
-            </p>
-        </div>
+<section id="perangkat-jaringan" class="bg-white py-16 overflow-hidden">
+    <div class="reveal mx-auto mb-10 max-w-xl text-center px-6">
+        <h2 class="font-display text-[26px] font-bold tracking-tight text-ink lg:text-[32px]">
+            Mendukung Berbagai Merk Perangkat
+        </h2>
+        <p class="mt-3 text-[15px] leading-[1.7] text-muted">
+            Berpengalaman menangani berbagai brand router, access point, dan switch.
+        </p>
+    </div>
 
-        <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7">
-            @php
-                $brands = [
-                    ['name'=>'Mikrotik','desc'=>'Router & RouterOS','icon'=>'bi-hdd-network','logo'=>'mikrotik.png'],
-                    ['name'=>'Ubiquiti','desc'=>'UniFi & airMAX','icon'=>'bi-broadcast','logo'=>'ubiquiti.png'],
-                    ['name'=>'Ruijie','desc'=>'Switch & AP Enterprise','icon'=>'bi-diagram-2','logo'=>'ruijie.png'],
-                    ['name'=>'Cisco','desc'=>'Switch & Router Enterprise','icon'=>'bi-router','logo'=>'cisco.png'],
-                    ['name'=>'Aruba','desc'=>'Switch & AP','icon'=>'bi-wifi','logo'=>'aruba.png'],
-                    ['name'=>'Huawei','desc'=>'Router & ONT Enterprise','icon'=>'bi-server','logo'=>'huawei.png'],
-                    ['name'=>'C-Data','desc'=>'OLT & Router','icon'=>'bi-wifi','logo'=>'cdata.png'],
-                    ['name'=>'Fortinet','desc'=>'Firewall','icon'=>'bi-wifi','logo'=>'fortinet.png'],
-                    ['name'=>'HSGQ','desc'=>'OLT','icon'=>'bi-wifi','logo'=>'hsgq.png'],
-                    ['name'=>'Juniper','desc'=>'Router & Switch Enterprise','icon'=>'bi-wifi','logo'=>'juniper.png'],
-                    ['name'=>'VSOL','desc'=>'OLT & Router','icon'=>'bi-wifi','logo'=>'vsol.png'],
-                    ['name'=>'ZTE','desc'=>'Router & Switch Enterprise','icon'=>'bi-wifi','logo'=>'juniper.png'],
-                ];
-            @endphp
+    @php
+        $brands = [
+            ['name'=>'Mikrotik',  'desc'=>'Router & RouterOS',           'icon'=>'bi-hdd-network', 'logo'=>'mikrotik.png'],
+            ['name'=>'Ubiquiti',  'desc'=>'UniFi & airMAX',              'icon'=>'bi-broadcast',   'logo'=>'ubiquiti.png'],
+            ['name'=>'Ruijie',    'desc'=>'Switch & AP Enterprise',       'icon'=>'bi-diagram-2',   'logo'=>'ruijie.png'],
+            ['name'=>'Cisco',     'desc'=>'Switch & Router Enterprise',   'icon'=>'bi-router',      'logo'=>'cisco.png'],
+            ['name'=>'Aruba',     'desc'=>'Switch & AP',                  'icon'=>'bi-wifi',        'logo'=>'aruba.png'],
+            ['name'=>'Huawei',    'desc'=>'Router & ONT Enterprise',      'icon'=>'bi-server',      'logo'=>'huawei.png'],
+            ['name'=>'C-Data',    'desc'=>'OLT & Router',                 'icon'=>'bi-wifi',        'logo'=>'cdata.png'],
+            ['name'=>'Fortinet',  'desc'=>'Firewall',                     'icon'=>'bi-shield-lock', 'logo'=>'fortinet.png'],
+            ['name'=>'HSGQ',      'desc'=>'OLT',                          'icon'=>'bi-wifi',        'logo'=>'hsgq.png'],
+            ['name'=>'Juniper',   'desc'=>'Router & Switch Enterprise',   'icon'=>'bi-wifi',        'logo'=>'juniper.png'],
+            ['name'=>'VSOL',      'desc'=>'OLT & Router',                 'icon'=>'bi-wifi',        'logo'=>'vsol.png'],
+            ['name'=>'ZTE',       'desc'=>'Router & Switch Enterprise',   'icon'=>'bi-wifi',        'logo'=>'zte.png'],
+        ];
+    @endphp
+
+    <style>
+        .marquee-track {
+            display: flex;
+            width: max-content;
+            animation: marqueeScroll 28s linear infinite;
+        }
+        .marquee-track:hover { animation-play-state: paused; }
+        @keyframes marqueeScroll {
+            0%   { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        /* Fade edges */
+        .marquee-wrap {
+            position: relative;
+        }
+        .marquee-wrap::before,
+        .marquee-wrap::after {
+            content: '';
+            position: absolute;
+            top: 0; bottom: 0;
+            width: 80px;
+            z-index: 2;
+            pointer-events: none;
+        }
+        .marquee-wrap::before { left: 0;  background: linear-gradient(to right, #ffffff, transparent); }
+        .marquee-wrap::after  { right: 0; background: linear-gradient(to left,  #ffffff, transparent); }
+        @media (prefers-reduced-motion: reduce) {
+            .marquee-track { animation: none; }
+        }
+    </style>
+
+    <div class="marquee-wrap">
+        <div class="marquee-track">
+            {{-- Set 1 --}}
             @foreach($brands as $b)
                 @php $hasLogo = file_exists(public_path('image/brands/'.$b['logo'])); @endphp
-                <div class="reveal card-lift flex flex-col items-center rounded-2xl border border-line bg-canvas p-5 text-center">
-                    <div class="mb-3 flex h-12 w-12 items-center justify-center overflow-hidden rounded-full bg-white shadow-soft">
+                <div class="flex flex-col items-center mx-3 w-[110px] flex-shrink-0 rounded-2xl border border-line bg-[#F7F8FC] px-4 py-5 text-center shadow-soft transition hover:shadow-card hover:-translate-y-1 duration-200">
+                    <div class="mb-3 flex h-12 w-12 items-center justify-center overflow-hidden rounded-full bg-white shadow-soft flex-shrink-0">
                         @if($hasLogo)
                             <img src="{{ asset('image/brands/'.$b['logo']) }}" alt="{{ $b['name'] }}" class="h-[68%] w-[68%] object-contain">
                         @else
                             <i class="bi {{ $b['icon'] }} text-xl text-indigo"></i>
                         @endif
                     </div>
-                    <div class="text-[13px] font-semibold text-ink">{{ $b['name'] }}</div>
-                    <div class="mt-0.5 text-[11.5px] text-muted">{{ $b['desc'] }}</div>
+                    <div class="text-[12.5px] font-semibold text-ink leading-tight">{{ $b['name'] }}</div>
+                    <div class="mt-0.5 text-[10.5px] text-muted leading-tight">{{ $b['desc'] }}</div>
                 </div>
             @endforeach
-            <div class="reveal flex flex-col items-center justify-center rounded-2xl border border-dashed border-indigo/40 bg-indigo/5 p-5 text-center">
-                <i class="bi bi-plus-circle mb-2 text-xl text-indigo"></i>
-                <div class="text-[13px] font-semibold text-indigo">Dan Lainnya</div>
-                <div class="mt-0.5 text-[11.5px] text-muted">Tanya kami</div>
-            </div>
+            {{-- Set 2 (duplikat biar loop mulus) --}}
+            @foreach($brands as $b)
+                @php $hasLogo = file_exists(public_path('image/brands/'.$b['logo'])); @endphp
+                <div class="flex flex-col items-center mx-3 w-[110px] flex-shrink-0 rounded-2xl border border-line bg-[#F7F8FC] px-4 py-5 text-center shadow-soft transition hover:shadow-card hover:-translate-y-1 duration-200" aria-hidden="true">
+                    <div class="mb-3 flex h-12 w-12 items-center justify-center overflow-hidden rounded-full bg-white shadow-soft flex-shrink-0">
+                        @if($hasLogo)
+                            <img src="{{ asset('image/brands/'.$b['logo']) }}" alt="" class="h-[68%] w-[68%] object-contain">
+                        @else
+                            <i class="bi {{ $b['icon'] }} text-xl text-indigo"></i>
+                        @endif
+                    </div>
+                    <div class="text-[12.5px] font-semibold text-ink leading-tight">{{ $b['name'] }}</div>
+                    <div class="mt-0.5 text-[10.5px] text-muted leading-tight">{{ $b['desc'] }}</div>
+                </div>
+            @endforeach
         </div>
+    </div>
+
+    <div class="reveal mt-8 text-center">
+        <span class="inline-flex items-center gap-1.5 rounded-full border border-indigo/20 bg-indigo/5 px-4 py-2 font-mono text-[11.5px] text-indigo">
+            <i class="bi bi-plus-circle"></i> Dan masih banyak lainnya — tanya kami!
+        </span>
     </div>
 </section>
 
