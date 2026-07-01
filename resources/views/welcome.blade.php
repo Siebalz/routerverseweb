@@ -648,7 +648,7 @@
                     ['name'=>'Cisco','desc'=>'Switch & Router Enterprise','icon'=>'bi-router','logo'=>'cisco.png'],
                     ['name'=>'Aruba','desc'=>'Switch & AP','icon'=>'bi-wifi','logo'=>'aruba.png'],
                     ['name'=>'Huawei','desc'=>'Router & ONT Enterprise','icon'=>'bi-server','logo'=>'huawei.png'],
-                    ['name'=>'C-Data','desc'=>'OLT & Router','icon'=>'bi-wifi','logo'=>'aruba.png'],
+                    ['name'=>'C-Data','desc'=>'OLT & Router','icon'=>'bi-wifi','logo'=>'cdata.png'],
                     ['name'=>'Fortinet','desc'=>'Firewall','icon'=>'bi-wifi','logo'=>'fortinet.png'],
                     ['name'=>'HSGQ','desc'=>'OLT','icon'=>'bi-wifi','logo'=>'hsgq.png'],
                     ['name'=>'Juniper','desc'=>'Router & Switch Enterprise','icon'=>'bi-wifi','logo'=>'juniper.png'],
@@ -1430,6 +1430,10 @@ function copyWqBcaNumber(btn) {
 }
 
 function openQrisWelcome(nama, harga) {
+    if (!{{ auth()->check() ? 'true' : 'false' }}) {
+        window.location.href = '{{ route('login') }}';
+        return;
+    }
     document.getElementById('wqPaketName').textContent  = nama;
     document.getElementById('wqPaketPrice').textContent = harga;
 
@@ -1461,6 +1465,10 @@ document.addEventListener('keydown', function(e){
 {{-- Belum ada metode pembayaran aktif: fallback ke WhatsApp --}}
 <script>
 function openQrisWelcome(nama, harga) {
+    if (!{{ auth()->check() ? 'true' : 'false' }}) {
+        window.location.href = '{{ route('login') }}';
+        return;
+    }
     var msg = encodeURIComponent('Halo Routerverse! Saya mau pesan paket *' + nama + '* (' + harga + ')');
     window.open('https://wa.me/6285173484715?text=' + msg, '_blank');
 }
