@@ -319,6 +319,37 @@
             100% { transform: translate(-15px, 25px) scale(0.92); opacity: 0.3; }
         }
 
+        /* ─── HERO CURSOR-FOLLOW GLOW ─── */
+        .hero-cursor-glow {
+            position: absolute;
+            width: 520px; height: 520px;
+            left: 0; top: 0;
+            margin-left: -260px; margin-top: -260px;
+            border-radius: 50%;
+            background: radial-gradient(circle at center, rgba(59,70,242,0.35) 0%, rgba(124,133,245,0.18) 35%, transparent 70%);
+            filter: blur(40px);
+            opacity: 0;
+            transition: opacity .4s ease;
+            transform: translate(var(--gx, 50vw), var(--gy, 50vh));
+            will-change: transform, opacity;
+        }
+        .hero-glow-wrap.is-active .hero-cursor-glow { opacity: 1; }
+        @media (prefers-reduced-motion: reduce), (hover: none) {
+            .hero-cursor-glow { display: none; }
+        }
+
+        /* ─── HERO IMAGE CURSOR TILT ─── */
+        .hero-tilt-wrap { perspective: 1200px; }
+        .hero-tilt {
+            transform: rotateX(var(--tx, 0deg)) rotateY(var(--ty, 0deg)) translateZ(0);
+            transition: transform .25s cubic-bezier(.22,.61,.36,1);
+            will-change: transform;
+        }
+        .hero-tilt-wrap:hover .hero-tilt { transition: transform .08s linear; }
+        @media (prefers-reduced-motion: reduce) {
+            .hero-tilt { transform: none !important; transition: none !important; }
+        }
+
         /* ─── Reveal ─── */
         .reveal { opacity: 0; transform: translateY(16px); transition: opacity .55s ease, transform .55s ease; }
         .reveal.is-visible { opacity: 1; transform: translateY(0); }
@@ -467,10 +498,11 @@
 ════════════════════════════════════════════ -->
 <section class="bg-grid relative overflow-hidden pt-36 pb-24 lg:pt-48 lg:pb-32">
     <!-- Animated glow blobs -->
-    <div class="hero-glow-wrap" aria-hidden="true">
+    <div class="hero-glow-wrap" id="hero-glow-wrap" aria-hidden="true">
         <div class="hero-glow hero-glow-1"></div>
         <div class="hero-glow hero-glow-2"></div>
         <div class="hero-glow hero-glow-3"></div>
+        <div class="hero-cursor-glow" id="hero-cursor-glow"></div>
     </div>
 
     <div class="relative mx-auto grid max-w-6xl items-center gap-14 px-6 lg:grid-cols-2 lg:px-8">
@@ -504,8 +536,8 @@
             </div>
         </div>
 
-        <div class="reveal flex justify-center">
-            <img src="{{ asset('image/datacenter.png') }}" alt="Ilustrasi datacenter" class="w-full max-w-[420px] drop-shadow-2xl">
+        <div class="reveal flex justify-center hero-tilt-wrap" id="hero-tilt-wrap">
+            <img src="{{ asset('image/datacenter.png') }}" alt="Ilustrasi datacenter" class="hero-tilt w-full max-w-[420px] drop-shadow-2xl" id="hero-tilt-img">
         </div>
     </div>
 </section>
@@ -1079,6 +1111,49 @@
 
 <script>
 (function () {
+    /* ── Hero: glow & gambar mengikuti cursor ── */
+    var heroSection  = document.querySelector('section.bg-grid');
+    var glowWrap      = document.getElementById('hero-glow-wrap');
+    var cursorGlow    = document.getElementById('hero-cursor-glow');
+    var tiltWrap       = document.getElementById('hero-tilt-wrap');
+    var tiltImg        = document.getElementById('hero-tilt-img');
+    var reduceMotion  = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (heroSection && glowWrap && cursorGlow && !reduceMotion) {
+        var rafId = null, pendingX = 0, pendingY = 0;
+
+        function applyGlow() {
+            rafId = null;
+            cursorGlow.style.setProperty('--gx', pendingX + 'px');
+            cursorGlow.style.setProperty('--gy', pendingY + 'px');
+        }
+
+        heroSection.addEventListener('mousemove', function (e) {
+            var rect = heroSection.getBoundingClientRect();
+            pendingX = e.clientX - rect.left;
+            pendingY = e.clientY - rect.top;
+            glowWrap.classList.add('is-active');
+            if (!rafId) rafId = requestAnimationFrame(applyGlow);
+
+            if (tiltWrap && tiltImg) {
+                var tRect = tiltWrap.getBoundingClientRect();
+                var relX = (e.clientX - tRect.left) / tRect.width - 0.5;
+                var relY = (e.clientY - tRect.top) / tRect.height - 0.5;
+                var maxDeg = 10;
+                tiltImg.style.setProperty('--tx', (relY * -maxDeg) + 'deg');
+                tiltImg.style.setProperty('--ty', (relX * maxDeg) + 'deg');
+            }
+        });
+
+        heroSection.addEventListener('mouseleave', function () {
+            glowWrap.classList.remove('is-active');
+            if (tiltImg) {
+                tiltImg.style.setProperty('--tx', '0deg');
+                tiltImg.style.setProperty('--ty', '0deg');
+            }
+        });
+    }
+
     /* ── Scroll: transparan → putih ── */
     var nav = document.getElementById('island-nav');
     function updateScroll() {

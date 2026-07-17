@@ -1,0 +1,124 @@
+version: "3.9"
+
+# Topologi yang direkomendasikan: Laravel (Routerverse) dijalankan SEBAGAI
+# CONTAINER juga di VM Docker ini (192.168.5.45), bersebelahan dengan
+# Traefik dan container-container Mikhmon. Dengan begitu Laravel cukup
+# bicara ke Docker API lewat internal network compose ini (tidak perlu
+# expose port Docker API ke jaringan luar sama sekali).
+#
+# Jalankan sekali di VM Docker (192.168.5.45):
+#   docker network create traefik-public
+#   docker compose -f docker-compose.traefik.yml up -d
+#
+# Lalu .env Laravel cukup diisi:
+#   DOCKER_HOST_URI=http://docker-socket-proxy:2375
+
+services:
+  traefik:
+    image: traefik:v3.1
+    restart: unless-stopped
+    command:
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--providers.docker.network=traefik-public"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge=true"
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web"
+      - "--certificatesresolvers.letsencrypt.acme.email=admin@domainmu.com"
+      - "--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json"
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "letsencrypt:/letsencrypt"
+    networks:
+      - traefik-public
+
+  # Perantara aman ke Docker socket. Laravel/queue worker bicara ke sini
+  # lewat HTTP biasa (bukan mount docker.sock langsung ke container Laravel),
+  # dan proxy ini hanya izinkan endpoint yang benar-benar dipakai
+  # (containers, images) — endpoint berbahaya (exec, mount volume host, dll)
+  # tetap terkunci meski container Laravel kena exploit.
+  docker-socket-proxy:
+    image: tecnativa/docker-socket-proxy:latest
+    restart: unless-stopped
+    environment:
+      CONTAINERS: 1
+      IMAGES: 1
+      NETWORKS: 1
+      POST: 1        # izinkan create/start container
+      # Semua endpoint lain (EXEC, VOLUMES, SYSTEM, dst) default 0 = terkunci
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    networks:
+      - traefik-public
+    # Tidak ada "ports:" -> tidak diekspos ke luar, cuma bisa diakses
+    # container lain yang satu network compose ini (misal Laravel).
+
+  # --- Database ---
+  mysql:
+    image: mysql:8.4
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE:-routerverse}
+      MYSQL_USER: ${DB_USERNAME:-routerverse}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-secret}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-rootsecret}
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - traefik-public
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${DB_ROOT_PASSWORD:-rootsecret}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    # Tidak ada "ports:" -> MySQL tidak diekspos ke luar VM, cuma bisa
+    # diakses container lain (app, queue-worker) lewat network compose ini.
+
+  # --- Laravel (Routerverse) ---
+  app:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file: ../.env
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - traefik-public
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.routerverse.rule=Host(`admin.domainmu.com`)"
+      - "traefik.http.routers.routerverse.entrypoints=websecure"
+      - "traefik.http.routers.routerverse.tls.certresolver=letsencrypt"
+      - "traefik.http.services.routerverse.loadbalancer.server.port=80"
+
+  queue-worker:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    entrypoint: []
+    command: php artisan queue:work --tries=3 --sleep=3
+    env_file: ../.env
+    networks:
+      - traefik-public
+    depends_on:
+      mysql:
+        condition: service_healthy
+      app:
+        condition: service_started
+
+networks:
+  traefik-public:
+    external: true
+
+volumes:
+  letsencrypt:
+  mysql-data:

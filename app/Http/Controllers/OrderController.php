@@ -138,6 +138,15 @@ class OrderController extends Controller
 
         $order->save();
 
+        // Trigger provisioning otomatis (VPN + container Mikhmon) hanya
+        // untuk kategori yang memang butuh instance server, dan hanya
+        // sekali (job ini idempotent lewat firstOrCreate di ProvisioningService).
+        if ($request->status === 'diproses'
+            && $order->category === 'hosting'
+            && str_contains(strtolower($order->service_name), 'mikhmon')) {
+            \App\Jobs\ProvisionOrderJob::dispatch($order);
+        }
+
         return back()->with('success', 'Status pesanan berhasil diperbarui.');
     }
 
