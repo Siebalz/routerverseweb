@@ -95,7 +95,7 @@ class Order extends Model
         }
 
         if ($this->expired_at === null) {
-            $this->expired_at = Carbon::parse($this->activated_at)->addMonth();
+            $this->expired_at = Carbon::parse($this->activated_at)->addMonthNoOverflow();
         }
     }
 
@@ -110,7 +110,7 @@ class Order extends Model
             : now();
 
         $this->activated_at = $this->activated_at ?? now();
-        $this->expired_at = Carbon::parse($base)->addMonth();
+        $this->expired_at = Carbon::parse($base)->addMonthNoOverflow();
         $this->status = 'diproses';
         $this->save();
     }

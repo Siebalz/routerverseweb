@@ -142,7 +142,7 @@ class VpnAccount extends Model
             }
         }
         $this->activated_at = $this->activated_at ?? now();
-        $this->expired_at = Carbon::parse($base)->addMonth();
+        $this->expired_at = Carbon::parse($base)->addMonthNoOverflow();
         $this->status = 'active';
         $this->applied_order_id = $order->id;
         $this->needs_sync = true; // akun baru atau diperpanjang: server perlu menyamakan
