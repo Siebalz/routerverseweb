@@ -25,7 +25,6 @@ class ProvisionOrderJob implements ShouldQueue
     {
         $provisioning->provision($this->order);
 
-        // TODO: kirim notifikasi ke customer (email/WA) berisi subdomain Mikhmon
-        // dan kredensial VPN, setelah provisioning sukses.
+        // Alamat dan login pertama tampil di halaman Kelola VPN pelanggan.
     }
 }

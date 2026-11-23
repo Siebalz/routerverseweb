@@ -31,7 +31,6 @@
 
     $hosting = [
         ['Mikhmon Online', 'mikhmonwhite.PNG', 183, 193, 10000, ['Akses Mikhmon Online 24/7', 'Remote dashboard dari mana saja', 'Kelola hotspot dan voucher', 'Dapat VPN port API']],
-        ['PHPNuxBill', 'phpnuxbill_square.png', 512, 512, 10000, ['Akses PHPNuxBill 24/7', 'Kelola hotspot dan PPPoE teratur', 'Monitoring real-time', 'Dapat VPN port API']],
     ];
 
     $rp = fn ($n) => 'Rp '.number_format($n, 0, ',', '.');
@@ -131,7 +130,7 @@
         <div class="sec-head">
             <x-arcs />
             <h2 id="judul-hosting">Paket Hosting</h2>
-            <p>Aplikasi pengelola hotspot dan billing yang sudah terpasang dan siap dipakai. Pesan dari dashboard pelanggan.</p>
+            <p>Mikhmon untuk mengelola hotspot dan voucher, sudah terpasang dan siap dipakai. Pesan dari dashboard pelanggan.</p>
         </div>
         <div class="panels">
             @foreach ($hosting as [$nama, $logo, $w, $h, $harga, $fitur])

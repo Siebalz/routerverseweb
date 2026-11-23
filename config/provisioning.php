@@ -13,12 +13,16 @@ return [
         'vpn_ip_start' => (int) env('MIKROTIK_VPN_IP_START', 10),
     ],
 
-    // --- Docker host (via Docker Engine API) ---
+    // --- Docker host (Mikhmon per pelanggan), diakses lewat API Portainer ---
     'docker' => [
-        // Contoh: unix:///var/run/docker.sock atau http://192.168.1.20:2375
-        'host' => env('DOCKER_HOST_URI', 'unix:///var/run/docker.sock'),
-        'mikhmon_image' => env('MIKHMON_IMAGE', 'boxbilling/mikhmon:latest'),
-        'network' => env('DOCKER_NETWORK', 'traefik-public'),
-        'base_domain' => env('MIKHMON_BASE_DOMAIN', 'panel.domainmu.com'),
+        // Portainer meneruskan Docker Engine API di /api/endpoints/{id}/docker.
+        // Isi DOCKER_API_KEY dengan access token Portainer (diawali ptr_).
+        'api_url' => env('DOCKER_API_URL', 'http://192.168.5.45:4500/api/endpoints/2/docker'),
+        'api_key' => env('DOCKER_API_KEY'),
+        'verify' => (bool) env('DOCKER_API_VERIFY', false),
+        'mikhmon_image' => env('MIKHMON_IMAGE', 'animegasan/mikhmon:latest'),
+        'network' => env('DOCKER_NETWORK', 'mikhmon-net'),
+        'base_domain' => env('MIKHMON_BASE_DOMAIN', 'mikhmonverse.my.id'),
+        'memory_mb' => (int) env('MIKHMON_MEMORY_MB', 128),
     ],
 ];

@@ -1,0 +1,43 @@
+# Stack untuk Docker host Mikhmon (192.168.5.45). Tempel di Portainer: Stacks > Add stack.
+# Isi TUNNEL_TOKEN di Environment variables stack (dari Cloudflare Zero Trust > Networks > Tunnels).
+#
+# Sebelum deploy, buat jaringan sekali: Portainer > Networks > Add network > nama "mikhmon-net".
+# Container Mikhmon per pelanggan dibuat otomatis oleh Routerverse dan masuk ke jaringan itu.
+#
+# Di Cloudflare Tunnel (tab Published application routes / Public hostname):
+#   Hostname  : *.mikhmonverse.my.id
+#   Service   : HTTP  traefik:80
+# Di DNS mikhmonverse.my.id tambahkan CNAME "*" ke <ID-TUNNEL>.cfargotunnel.com (Proxied).
+
+services:
+  traefik:
+    image: traefik:v3.6
+    container_name: traefik
+    restart: unless-stopped
+    command:
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--providers.docker.network=mikhmon-net"
+      - "--entrypoints.web.address=:80"
+      - "--ping=true"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    networks:
+      - mikhmon-net
+    # Tanpa "ports:" sengaja: hanya cloudflared yang boleh menjangkau Traefik.
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: cloudflared-mikhmon
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run
+    environment:
+      TUNNEL_TOKEN: ${TUNNEL_TOKEN}
+    depends_on:
+      - traefik
+    networks:
+      - mikhmon-net
+
+networks:
+  mikhmon-net:
+    external: true

@@ -181,6 +181,7 @@ button:disabled, [aria-disabled="true"] { cursor: not-allowed; }
 .panel-logo img { width: 36px; height: 36px; object-fit: contain; }
 .panel .btn { margin-top: auto; }
 @media (min-width: 760px) { .panels { grid-template-columns: 1fr 1fr; } }
+.panels > .panel:only-child { max-width: 520px; }
 
 /* Merek perangkat */
 .brands { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0; border-top: 1px solid var(--line); border-left: 1px solid var(--line); }

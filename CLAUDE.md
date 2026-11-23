@@ -9,3 +9,4 @@ To update antislop later: download `antislop.md` again, or run `npx antislop-ai 
 Poin web, bayar otomatis pakai poin, dan top up Duitku POP: lihat `docs/RENCANA-POIN-PEMBAYARAN.md`. VPN Remote: lihat `docs/VPN-MIKROTIK.md`.
 - Duitku POP: lihat `docs/DUITKU.md`.
 - Verifikasi email dan OTP login: lihat `docs/AUTENTIKASI.md`.
+- Mikhmon Online (Docker/Portainer): lihat `docs/MIKHMON-DOCKER.md`.

@@ -8,7 +8,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title', 'Routerverse')</title>
-    <meta name="description" content="@yield('description', 'Setting jaringan MikroTik, remote server, hosting Mikhmon dan PHPNuxBill, serta template voucher hotspot dari Routerverse, Dayeuhkolot, Kab. Bandung.')">
+    <meta name="description" content="@yield('description', 'Setting jaringan MikroTik, remote server, hosting Mikhmon Online, serta template voucher hotspot dari Routerverse, Dayeuhkolot, Kab. Bandung.')">
     <meta name="theme-color" content="#3B46F2">
     <link rel="icon" type="image/png" href="{{ asset('image/favicon.png') }}">
     <link rel="preload" href="{{ asset('font/Poppins-Bold.woff2') }}" as="font" type="font/woff2" crossorigin>

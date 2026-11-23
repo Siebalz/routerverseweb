@@ -34,7 +34,6 @@ class OrderController extends Controller
                 'color' => '#00c2a8',
                 'items' => [
                     ['name' => 'Mikhmon Online', 'amount' => 10000, 'price' => 'Rp 10.000 / bulan', 'desc' => 'Akses 24/7, Remote Dashboard, Manage Hotspot & Voucheran, VPN Port API'],
-                    ['name' => 'PHPNuxBill', 'amount' => 10000, 'price' => 'Rp 10.000 / bulan', 'desc' => 'Akses 24/7, Manage Hotspot & PPPoE, Monitoring Real-time, VPN Port API'],
                 ],
             ],
             'network_setting' => [

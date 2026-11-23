@@ -14,3 +14,6 @@ Schedule::command('orders:expire')->dailyAt('00:05');
 
 // Terapkan perubahan VPN yang tertunda dan nonaktifkan akun yang habis masa aktif.
 Schedule::command('vpn:sync')->everyFiveMinutes()->withoutOverlapping();
+
+// Hentikan Mikhmon yang habis masa aktif dan nyalakan lagi yang sudah diperpanjang.
+Schedule::command('mikhmon:sync')->everyFiveMinutes()->withoutOverlapping();

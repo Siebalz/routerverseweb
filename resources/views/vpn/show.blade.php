@@ -92,6 +92,13 @@
                     <a class="btn btn-line" href="{{ route('services.index') }}">Pesan Mikhmon Online</a>
                 @endif
             </div>
+            @if ($mikhmon && $mikhmon->web_password)
+                <dl class="kv" style="margin-top:20px">
+                    <div><dt>Alamat Mikhmon</dt><dd>https://{{ $mikhmon->mikhmon_subdomain }}</dd></div>
+                    <div><dt>Login pertama (dari kami)</dt><dd>{{ $mikhmon->web_user }} / <span style="user-select:all">{{ $mikhmon->web_password }}</span></dd></div>
+                </dl>
+                <p style="margin-top:12px;font-size:0.9375rem">Setelah masuk, Mikhmon meminta login sendiri. Login bawaannya <strong>mikhmon / 1234</strong>. Segera ganti di menu Admin, lalu tambahkan router Anda dengan IP VPN di atas.</p>
+            @endif
         </section>
 
         <form class="block" method="POST" action="{{ route('vpn.password', $vpn) }}">
