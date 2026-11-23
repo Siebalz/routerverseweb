@@ -30,6 +30,7 @@
             <a href="{{ route('points.index') }}" @if(request()->routeIs('points.*')) aria-current="page" @endif>Poin Saya <span class="pts">Rp {{ number_format((int) $u->points, 0, ',', '.') }}</span></a>
             <a href="{{ route('services.my-servers') }}" @if(request()->routeIs('services.my-servers')) aria-current="page" @endif>Server Saya</a>
             <a href="{{ route('products.index') }}" @if(request()->routeIs('products.*')) aria-current="page" @endif>Template Voucher</a>
+            <a href="{{ route('security.index') }}" @if(request()->routeIs('security.*')) aria-current="page" @endif>Keamanan Akun</a>
 
             @if ($u->isAdmin())
                 <p class="nav-title">Admin</p>

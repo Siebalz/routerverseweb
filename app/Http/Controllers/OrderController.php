@@ -24,9 +24,8 @@ class OrderController extends Controller
                 'icon' => 'bi-hdd-network',
                 'color' => '#3b46f2',
                 'items' => [
-                    ['name' => 'Starter', 'amount' => null, 'price' => 'Rp 0 / bulan', 'desc' => '1 Port, Akses Dasar Remote, L2TP/IPsec, Garansi'],
-                    ['name' => 'Basic', 'amount' => 2000, 'price' => 'Rp 2.000 / bulan', 'desc' => '3 Port, Semua fitur Starter, Monitoring Lanjutan, Dukungan 24/7'],
-                    ['name' => 'Premium', 'amount' => 10000, 'price' => 'Rp 10.000 / bulan', 'desc' => '5 Port, Semua fitur Basic, Mikhmon Online 1 Bulan Gratis'],
+                    ['name' => '1 Port', 'amount' => config('vpn.plans.port1.price'), 'price' => 'Rp '.number_format(config('vpn.plans.port1.price'), 0, ',', '.').' / bulan', 'desc' => 'Pilih satu: Winbox, API, atau port custom. Script L2TP dan kelola port dari dashboard.'],
+                    ['name' => '4 Port', 'amount' => config('vpn.plans.port4.price'), 'price' => 'Rp '.number_format(config('vpn.plans.port4.price'), 0, ',', '.').' / bulan', 'desc' => 'Winbox, API, WebFig, dan HTTPS sekaligus. Script L2TP dan kelola port dari dashboard.'],
                 ],
             ],
             'hosting' => [

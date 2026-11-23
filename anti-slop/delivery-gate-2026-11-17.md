@@ -53,3 +53,24 @@ Perubahan perilaku yang disengaja:
 1. Dialog "Pesan" di katalog hanya berisi form pesanan. Tab QRIS dan BCA di dalamnya dihapus karena membayar sebelum memesan membingungkan. Pembayaran dilakukan dari Pesanan Saya (tombol Bayar per pesanan) atau dari banner setelah pesan.
 2. Admin: status pesanan sekarang diubah dengan tombol Simpan, tidak lagi otomatis saat pilihan berganti, karena perubahan ke "diproses" memicu provisioning Mikhmon.
 3. Server Saya: ditambah tombol "Tanya Admin" atau "Perpanjang via WhatsApp" untuk pelanggan.
+
+
+# Tambahan 2026-11-23: verifikasi email dan kode OTP login (mode DURING)
+
+Ruang lingkup: `auth/otp`, `auth/verify-email`, `settings/security` (Keamanan Akun), perubahan teks `auth/register`, tautan menu di `layouts/dashboard`, dua email (`emails/login-otp*`). Gaya: `.otp-input` dan `.linklike` di `public/rv.css`.
+
+## Hard Gate
+- R-02 PASS: nol em dash di semua berkas baru dan yang diubah.
+- R-03 PASS: 8 keadaan halaman diuji di 390px dan 1280px, tanpa scroll horizontal, semua tombol dan tautan berbentuk tombol minimal 44px (tombol "Kembali ke halaman masuk" dan "Keluar" sempat 21px, diperbaiki).
+- R-17/R-36/R-38 PASS: tidak ada angka, klaim, atau label yang tidak bisa dibuktikan. Semua angka (10 menit, 5 percobaan, 60 detik) diambil dari konfigurasi.
+- R-25 PASS: memakai token warna yang sudah diukur; tidak ada warna baru.
+- R-26 PASS: semua tombol berfungsi (kirim ulang, batal, aktifkan, matikan); tidak ada tautan mati.
+- R-27 PASS: galat kode salah (dengan sisa percobaan), kode kedaluwarsa, kirim email gagal, password salah, dan fitur dimatikan admin semuanya punya pesan; memuat = tombol berubah "Memeriksa...".
+- R-32 PASS: kolom kode dan tombol memakai outline fokus 3px; kolom kode `autocomplete="one-time-code"` dan `inputmode="numeric"`.
+- R-35 PARTIAL: tampilan diuji lewat pengompilasi Blade mini di Chromium (tanpa galat konsol). Logika `LoginOtpService` diuji terpisah dengan pengganti database dan email (16 pemeriksaan: benar, salah berulang, kunci, kedaluwarsa, sekali pakai, jeda kirim ulang, email gagal). Aplikasi Laravel asli belum dijalankan di sini (Composer tidak bisa mengunduh paket). `tests/Feature/AuthSecurityTest.php` ditulis tetapi belum dijalankan: jalankan `php artisan test --filter=AuthSecurityTest` di server.
+- R-39 PASS: label terlihat di semua kolom, pesan galat terhubung lewat `aria-describedby`, `role="alert"` pada galat kode.
+
+## Tambahan 2026-11-23 (2): Cloudflare Turnstile di login dan daftar
+- R-40 PASS dengan catatan: ini satu-satunya skrip pihak ketiga di situs. `challenges.cloudflare.com/turnstile/v0/api.js` dimuat `async defer` (tidak menahan render), hanya di `/login` dan `/register`, dan hanya bila kunci Turnstile terisi di `.env`. Ruang widget (`min-height: 65px`) disediakan sejak awal sehingga tombol tidak bergeser (diukur: widget 394x65 desktop, 340x65 ponsel, tanpa scroll horizontal).
+- R-27 PASS: kegagalan verifikasi punya pesan sendiri; Cloudflare tak terjangkau = ditolak (fail closed) dengan pesan yang sama; saklar `TURNSTILE_ENABLED` untuk keadaan darurat.
+- R-35 PARTIAL: logika `Turnstile` diuji dengan pengganti koneksi (16 pemeriksaan: nonaktif, token kosong/bukan string/terlalu panjang, valid, ditolak, HTTP 500, tidak terjangkau). Widget asli belum dilihat di browser nyata (butuh kunci dan jaringan ke Cloudflare). Tes `AuthSecurityTest` untuk Turnstile ditulis tetapi belum dijalankan di Laravel asli.

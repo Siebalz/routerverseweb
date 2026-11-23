@@ -25,9 +25,8 @@
 
     // Harga paket: ubah di sini. Semua tombol paket mengarah ke dashboard pelanggan.
     $remote = [
-        ['Starter', 'Cocok untuk uji coba',   0,     ['1 Port', 'Akses dasar remote', 'L2TP/IPsec', 'Garansi']],
-        ['Basic',   'Untuk pemakaian harian', 2000,  ['3 Port', 'Semua fitur Starter', 'Monitoring lanjutan', 'Dukungan teknis 24/7']],
-        ['Premium', 'Untuk kebutuhan besar',  10000, ['5 Port', 'Semua fitur Basic', 'Mikhmon Online 1 bulan gratis']],
+        ['1 Port', 'Satu port tujuan sesuai kebutuhan', config('vpn.plans.port1.price'), ['Pilih satu: Winbox, API, atau port custom', 'Kelola port dan password dari dashboard', 'Script L2TP dengan watchdog siap tempel', 'Aktif otomatis setelah dibayar dengan poin']],
+        ['4 Port', 'Satu paket untuk semua akses router', config('vpn.plans.port4.price'), ['Winbox, API, WebFig, dan HTTPS sekaligus', 'Port publik berurutan, mudah diingat', 'Script L2TP dengan watchdog siap tempel', 'Aktif otomatis setelah dibayar dengan poin']],
     ];
 
     $hosting = [

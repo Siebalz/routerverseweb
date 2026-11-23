@@ -2,12 +2,12 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
@@ -43,6 +43,7 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
+            'otp_enabled' => 'boolean',
             'password' => 'hashed',
         ];
     }
@@ -53,6 +54,24 @@ class User extends Authenticatable
     public function isAdmin(): bool
     {
         return $this->role === 'admin';
+    }
+
+    /** Admin wajib memakai kode OTP saat login (selama fitur OTP menyala). */
+    public function otpRequiredByRole(): bool
+    {
+        return (bool) config('security.otp.enabled')
+            && (bool) config('security.otp.admin_required')
+            && $this->isAdmin();
+    }
+
+    /** Apakah login akun ini harus melewati kode OTP dari email. */
+    public function requiresOtp(): bool
+    {
+        if (! config('security.otp.enabled')) {
+            return false;
+        }
+
+        return $this->otpRequiredByRole() || (bool) $this->otp_enabled;
     }
 
     public function orders()

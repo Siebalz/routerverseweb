@@ -1,8 +1,8 @@
-APP_NAME=Laravel
+APP_NAME=Routerverse
 APP_ENV=local
 APP_KEY=base64:v4LL3qoXy/U6+AX7YZiNXGA/QHFKqJaiLZhbXoPAt/k=
 APP_DEBUG=true
-APP_URL=https://visit-russell-antibody-wal.trycloudflare.com/
+APP_URL=127.0.0.1
 APP_LOCALE=en
 APP_FALLBACK_LOCALE=en
 APP_FAKER_LOCALE=en_US
@@ -111,3 +111,22 @@ DUITKU_MIN_TOPUP=10000
 # Biaya ditanggung pembeli = flat + persen dari nominal. Isi sesuai biaya Duitku (0 = Anda yang menanggung).
 DUITKU_FEE_FLAT=0
 DUITKU_FEE_PERCENT=0
+
+# Email dipakai untuk verifikasi pendaftaran dan kode OTP login.
+# "log" = email hanya ditulis ke storage/logs/laravel.log (untuk uji lokal). Di server isi SMTP sungguhan:
+MAIL_MAILER=smtp
+MAIL_SCHEME=null
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USERNAME=iqbalrinaldi098@gmail.com
+MAIL_PASSWORD=bgku ebat igpo wbxg
+MAIL_FROM_ADDRESS="iqbalrinaldi098@gmail.com"
+MAIL_FROM_NAME="Routerverse"
+
+# Keamanan masuk akun (lihat docs/AUTENTIKASI.md)
+AUTH_EMAIL_VERIFICATION=true
+AUTH_OTP_ENABLED=true
+AUTH_OTP_ADMIN_REQUIRED=true
+AUTH_OTP_TTL=10
+AUTH_OTP_MAX_ATTEMPTS=5
+AUTH_OTP_RESEND_SECONDS=60

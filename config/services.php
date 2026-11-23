@@ -28,6 +28,13 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    // Cloudflare Turnstile: kotak verifikasi "bukan robot" di halaman login dan daftar.
+    // Kosongkan kedua kunci untuk mematikannya (misalnya saat uji lokal).
+    'turnstile' => [
+        'site_key' => env('TURNSTILE_SITE_KEY'),
+        'secret_key' => env('TURNSTILE_SECRET_KEY'),
+    ],
+
     'whatsapp' => [
         // Nomor admin untuk pesan dan konfirmasi pembayaran (format internasional tanpa +)
         'number' => env('WHATSAPP_NUMBER', '6285173484715'),

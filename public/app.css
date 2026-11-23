@@ -193,3 +193,4 @@ code.addr { display: inline-block; padding: 2px 8px; border-radius: 6px; backgro
 .ledger .minus { color: var(--bad); }
 .list .actions form { margin: 0; }
 .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+

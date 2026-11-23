@@ -330,3 +330,12 @@ select.input { padding-right: 12px; }
   html { scroll-behavior: auto; }
   *, *::before, *::after { transition: none !important; animation: none !important; }
 }
+
+/* Kolom kode OTP (login) dan tombol yang tampil seperti tautan */
+.otp-input { font-size: 1.5rem; letter-spacing: 0.5em; text-align: center; font-variant-numeric: tabular-nums; padding-left: 0.5em; }
+.linklike { background: none; border: 0; padding: 0; font: inherit; color: var(--indigo); text-decoration: underline; cursor: pointer; min-height: 44px; }
+.linklike:hover { color: var(--ink); }
+.linklike:focus-visible { outline: 3px solid var(--indigo); outline-offset: 2px; }
+
+/* Kotak Turnstile: tinggi disediakan sejak awal supaya tombol tidak bergeser saat widget selesai dimuat */
+.cf-turnstile { min-height: 65px; }

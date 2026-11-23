@@ -42,6 +42,8 @@
                 @error('password') <p class="field-error" id="password-error">{{ $message }}</p> @enderror
             </div>
 
+            <x-turnstile />
+
             <button type="submit" class="btn btn-primary btn-block" data-busy="Memproses...">Masuk</button>
         </form>
 

@@ -8,8 +8,9 @@
     <aside class="auth-aside">
         <x-arcs />
         <h1 style="margin-top:16px">Buat akun untuk memesan layanan Routerverse</h1>
-        <p>Pendaftaran memakai nama, email, dan password. Setelah itu Anda diarahkan ke halaman masuk.</p>
+        <p>Pendaftaran memakai nama, email, dan password. Kami mengirim tautan verifikasi ke email Anda, jadi gunakan alamat yang aktif.</p>
         <ul class="rows">
+            <li><h3>Verifikasi lewat email</h3><p>Klik tautan di email untuk mengaktifkan akun.</p></li>
             <li><h3>Pesan dari dashboard</h3><p>Pilih layanan dan kirim catatan kebutuhan Anda.</p></li>
             <li><h3>Pantau pesanan</h3><p>Status pesanan dan server Anda tampil di satu tempat.</p></li>
         </ul>
@@ -56,6 +57,8 @@
                     <button type="button" class="btn btn-line btn-sm" data-toggle-pw="password_confirmation" aria-pressed="false">Tampilkan</button>
                 </div>
             </div>
+
+            <x-turnstile />
 
             <button type="submit" class="btn btn-primary btn-block" data-busy="Mendaftarkan...">Daftar</button>
         </form>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Services\Turnstile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
@@ -20,13 +21,20 @@ class RegisterController extends Controller
     // Proses register
     public function register(Request $request)
     {
+        // Cloudflare Turnstile: tolak robot sebelum menyentuh database.
+        if (! app(Turnstile::class)->verify($request->input('cf-turnstile-response'), $request->ip())) {
+            return back()
+                ->withInput($request->only('name', 'email'))
+                ->withErrors(['captcha' => 'Verifikasi keamanan gagal. Tunggu kotak verifikasi selesai, lalu coba lagi.']);
+        }
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => ['required', 'confirmed', Password::min(8)->letters()->numbers()],
         ]);
 
-        User::create([
+        $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
@@ -34,7 +42,30 @@ class RegisterController extends Controller
             'role' => User::count() === 0 ? 'admin' : 'user',
         ]);
 
-        // Setelah registrasi berhasil, arahkan ke login
-        return redirect()->route('login')->with('success', 'Registrasi berhasil! Silakan login.');
+        // Tanpa verifikasi email: alur lama, langsung ke halaman login.
+        if (! config('security.email_verification')) {
+            $user->forceFill(['email_verified_at' => now()])->save();
+
+            return redirect()->route('login')->with('success', 'Registrasi berhasil! Silakan login.');
+        }
+
+        // Kirim tautan verifikasi, lalu masuk ke halaman "cek email".
+        $mailFailed = false;
+        try {
+            $user->sendEmailVerificationNotification();
+        } catch (\Throwable $e) {
+            report($e);
+            $mailFailed = true;
+        }
+
+        Auth::login($user);
+        $request->session()->regenerate();
+
+        return redirect()->route('verification.notice')->with(
+            $mailFailed ? 'error' : 'success',
+            $mailFailed
+                ? 'Akun sudah dibuat, tetapi email verifikasi gagal dikirim. Tekan "Kirim ulang email" di bawah.'
+                : 'Akun dibuat. Kami sudah mengirim tautan verifikasi ke email Anda.'
+        );
     }
 }
