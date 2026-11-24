@@ -24,7 +24,8 @@ class MikhmonProvisioningTest extends TestCase
             'provisioning.docker.api_key' => 'ptr_uji',
             'provisioning.docker.base_domain' => 'mikhmonverse.my.id',
             'provisioning.docker.network' => 'mikhmon-net',
-            'provisioning.docker.mikhmon_image' => 'animegasan/mikhmon:latest',
+            'provisioning.docker.gate' => true,
+            'provisioning.docker.mikhmon_image' => 'animegasan/mikhmon:v3-latest',
         ]);
     }
 
@@ -63,7 +64,7 @@ class MikhmonProvisioningTest extends TestCase
             $n = "mikhmon-order-{$order->id}";
 
             return $r->hasHeader('X-API-Key', 'ptr_uji')
-                && $r['Image'] === 'animegasan/mikhmon:latest'
+                && $r['Image'] === 'animegasan/mikhmon:v3-latest'
                 && $r['HostConfig']['NetworkMode'] === 'mikhmon-net'
                 && $labels["traefik.http.routers.{$n}.rule"] === "Host(`order{$order->id}.mikhmonverse.my.id`)"
                 && $labels["traefik.http.routers.{$n}.entrypoints"] === 'web'
@@ -168,5 +169,37 @@ class MikhmonProvisioningTest extends TestCase
             ->assertSessionHasErrors('password');
 
         $this->assertSame(1, ServerInstance::count());
+    }
+
+    public function test_without_gate_there_is_no_traefik_login_and_no_password_needed(): void
+    {
+        config(['provisioning.docker.gate' => false]);
+        Http::fake([
+            '*/images/*/json' => Http::response([], 200),
+            '*/containers/mikhmon-order-*' => Http::response('', 204),
+            '*/containers/create*' => Http::response(['Id' => 'abc123'], 201),
+            '*/containers/abc123/start' => Http::response('', 204),
+        ]);
+
+        $this->actingAs(User::factory()->create())
+            ->post(route('hosting.store'), ['subdomain' => 'tanpagate'])
+            ->assertSessionHasNoErrors();
+        $order = Order::first();
+
+        $instance = app(ProvisioningService::class)->provision($order);
+
+        $this->assertSame('active', $instance->status);
+        $this->assertNull($instance->web_password);
+        Http::assertSent(function (Request $r) use ($order) {
+            if (! str_contains($r->url(), '/containers/create')) {
+                return false;
+            }
+            $labels = $r['Labels'];
+            $n = "mikhmon-order-{$order->id}";
+
+            return $labels["traefik.http.routers.{$n}.rule"] === 'Host(`tanpagate.mikhmonverse.my.id`)'
+                && ! array_key_exists("traefik.http.routers.{$n}.middlewares", $labels)
+                && ! array_key_exists("traefik.http.middlewares.{$n}-auth.basicauth.users", $labels);
+        });
     }
 }

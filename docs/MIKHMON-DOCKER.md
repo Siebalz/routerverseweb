@@ -25,7 +25,7 @@ Laravel (192.168.5.101) --API Portainer :4500--> membuat/menghentikan container
 DOCKER_API_URL=http://192.168.5.45:4500/api/endpoints/2/docker
 DOCKER_API_KEY=ptr_...
 DOCKER_API_VERIFY=false
-MIKHMON_IMAGE=animegasan/mikhmon:latest
+MIKHMON_IMAGE=animegasan/mikhmon:v3-latest
 DOCKER_NETWORK=mikhmon-net
 MIKHMON_BASE_DOMAIN=mikhmonverse.my.id
 ```
@@ -49,13 +49,13 @@ Buat permanen lewat netplan. Di pelanggan, port API router (8728) harus terbuka 
 ## 5. Cara kerja
 - Pelanggan membuka Layanan > Order Mikhmon Online, memilih subdomain (`nama.mikhmonverse.my.id`, huruf dan angka 4-24) dan sandi pembuka. Alamat langsung dipesan, tidak bisa dipakai orang lain.
 - Admin mengaktifkan pesanan atau pelanggan bayar dengan poin, antrean `ProvisionOrderJob` membuat container.
+- Kotak login Traefik (basic auth) mati secara default (`MIKHMON_GATE=false`): alamat langsung membuka login Mikhmon (`mikhmon / 1234`, pelanggan wajib menggantinya). Isi `MIKHMON_GATE=true` untuk memasang kotak login di depannya.
 - Pelanggan melihat alamat dan login pertama di halaman Kelola VPN. Login ini dari Traefik (basic auth),
   dengan username `pelanggan` dan sandi pilihan pelanggan, karena Mikhmon bawaan memakai `mikhmon / 1234`. Setelah itu pelanggan ganti login Mikhmon sendiri.
 - `php artisan mikhmon:sync` (dijadwalkan tiap 5 menit) menghentikan container yang masa aktifnya habis
   dan menyalakannya lagi setelah diperpanjang. Data tidak dihapus.
 
 ## 6. Catatan
-- Image terakhir diperbarui sekitar 4 tahun lalu. Tag `v3-latest` disarankan pembuatnya untuk pengguna
-  Cloudflare Zero Trust; bila `latest` bermasalah lewat tunnel, ganti `MIKHMON_IMAGE`.
+- Image yang dipakai: `animegasan/mikhmon:v3-latest` (Mikhmon v3, disarankan pembuatnya untuk pengguna Cloudflare). Port aplikasinya 80, jadi Traefik menunjuk ke port 80 dan container tidak perlu membuka port ke host. Image ini terakhir diperbarui sekitar 4 tahun lalu.
 - Container tanpa volume: data Mikhmon aman selama container tidak dihapus (restart dan stop tidak menghapus).
 - Jangan ekspos port 4500 ke internet.

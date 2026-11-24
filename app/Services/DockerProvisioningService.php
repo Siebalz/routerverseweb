@@ -68,10 +68,9 @@ class DockerProvisioningService
         $name = self::containerName($orderId);
         $subdomain = $host ?: "order{$orderId}.{$cfg['base_domain']}";
 
-        // Pintu pertama: Mikhmon bawaan memakai login mikhmon/1234 yang sudah diketahui umum,
-        // jadi alamatnya dikunci dulu dengan login dari Traefik sampai pelanggan menggantinya.
-        $webPassword = $password ?: Str::password(14, symbols: false);
-        $hash = password_hash($webPassword, PASSWORD_BCRYPT);
+        // Kotak login Traefik hanya bila diaktifkan (MIKHMON_GATE=true).
+        $gate = (bool) $cfg['gate'];
+        $webPassword = $gate ? ($password ?: Str::password(14, symbols: false)) : null;
 
         $this->ensureImage($cfg['mikhmon_image']);
 
@@ -85,16 +84,16 @@ class DockerProvisioningService
                 'RestartPolicy' => ['Name' => 'unless-stopped'],
                 'Memory' => max(64, (int) $cfg['memory_mb']) * 1024 * 1024,
             ],
-            'Labels' => [
+            'Labels' => array_filter([
                 'traefik.enable' => 'true',
                 'traefik.docker.network' => $cfg['network'],
                 "traefik.http.routers.{$name}.rule" => "Host(`{$subdomain}`)",
                 "traefik.http.routers.{$name}.entrypoints" => 'web',
-                "traefik.http.routers.{$name}.middlewares" => "{$name}-auth",
-                "traefik.http.middlewares.{$name}-auth.basicauth.users" => self::WEB_USER.':'.$hash,
+                "traefik.http.routers.{$name}.middlewares" => $gate ? "{$name}-auth" : null,
+                "traefik.http.middlewares.{$name}-auth.basicauth.users" => $gate ? self::WEB_USER.':'.password_hash($webPassword, PASSWORD_BCRYPT) : null,
                 "traefik.http.services.{$name}.loadbalancer.server.port" => '80',
                 'routerverse.order' => (string) $orderId,
-            ],
+            ], fn ($v) => $v !== null),
         ]);
 
         if ($create->failed()) {
@@ -112,7 +111,7 @@ class DockerProvisioningService
             'container_id' => $containerId,
             'container_name' => $name,
             'subdomain' => $subdomain,
-            'web_user' => self::WEB_USER,
+            'web_user' => $gate ? self::WEB_USER : null,
             'web_password' => $webPassword,
         ];
     }

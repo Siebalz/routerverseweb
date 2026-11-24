@@ -41,7 +41,7 @@ class HostingController extends Controller
                 fn ($attr, $value, $fail) => ServerInstance::where('mikhmon_subdomain', "{$value}.{$domain}")->exists()
                     ? $fail('Subdomain ini sudah dipakai. Coba yang lain.') : null,
             ],
-            'password' => ['required', 'string', 'regex:/^[A-Za-z0-9]{6,24}$/'],
+            'password' => [config('provisioning.docker.gate') ? 'required' : 'nullable', 'string', 'regex:/^[A-Za-z0-9]{6,24}$/'],
         ], [
             'subdomain.regex' => 'Subdomain hanya huruf dan angka tanpa spasi, 4 sampai 24 karakter.',
             'subdomain.not_in' => 'Subdomain ini tidak boleh dipakai. Coba yang lain.',
@@ -68,8 +68,8 @@ class HostingController extends Controller
                     'order_id' => $order->id,
                     'status' => 'pending',
                     'mikhmon_subdomain' => $host,
-                    'web_user' => \App\Services\DockerProvisioningService::WEB_USER,
-                    'web_password' => $data['password'],
+                    'web_user' => config('provisioning.docker.gate') ? \App\Services\DockerProvisioningService::WEB_USER : null,
+                    'web_password' => config('provisioning.docker.gate') ? ($data['password'] ?? null) : null,
                 ]);
 
                 return $order;

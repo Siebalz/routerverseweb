@@ -6,7 +6,7 @@
 #
 # Di Cloudflare Tunnel (tab Published application routes / Public hostname):
 #   Hostname  : *.mikhmonverse.my.id
-#   Service   : HTTP  traefik:80
+#   Service   : HTTP  192.168.5.45:8081   (atau traefik:80 bila cloudflared satu network)
 # Di DNS mikhmonverse.my.id tambahkan CNAME "*" ke <ID-TUNNEL>.cfargotunnel.com (Proxied).
 
 services:
@@ -24,7 +24,10 @@ services:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
     networks:
       - mikhmon-net
-    # Tanpa "ports:" sengaja: hanya cloudflared yang boleh menjangkau Traefik.
+    # Port 8081 di host dipakai Cloudflare Tunnel (Service URL: http://192.168.5.45:8081).
+    # Cukup dijangkau dari LAN; jangan di-forward dari router ke internet.
+    ports:
+      - "8081:80"
 
   cloudflared:
     image: cloudflare/cloudflared:latest

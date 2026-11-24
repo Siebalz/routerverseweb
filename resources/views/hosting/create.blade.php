@@ -27,6 +27,7 @@
             <p class="field-hint" id="sub-hint">Huruf dan angka tanpa spasi, 4 sampai 24 karakter. Ini alamat Mikhmon Anda.</p>
         </div>
 
+        @if (config('provisioning.docker.gate'))
         <div class="field">
             <label for="password">Sandi pembuka</label>
             <div class="pw">
@@ -35,6 +36,7 @@
             </div>
             <p class="field-hint" id="pw-hint">Dipakai di kotak login saat alamat Anda dibuka (username: pelanggan). Huruf dan angka, 6 sampai 24 karakter.</p>
         </div>
+        @endif
 
         <p class="total">Total: <strong>Rp {{ number_format($price, 0, ',', '.') }}</strong> <span>per bulan</span></p>
         <div class="btn-bar">
@@ -46,9 +48,9 @@
     <aside class="block" aria-labelledby="info-title">
         <h2 id="info-title">Cara kerjanya</h2>
         <ol class="steps">
-            <li>Pilih subdomain dan sandi, lalu tekan Order.</li>
+            <li>Pilih subdomain, lalu tekan Order.</li>
             <li>Bayar dengan poin dari Pesanan Saya. Setelah lunas, Mikhmon Anda aktif otomatis.</li>
-            <li>Buka alamat Anda, masuk dengan username <strong>pelanggan</strong> dan sandi di atas, lalu login Mikhmon (bawaan <strong>mikhmon / 1234</strong>, segera ganti).</li>
+            <li>Buka alamat Anda dan masuk ke Mikhmon dengan login bawaan <strong>mikhmon / 1234</strong>. <strong>Segera ganti</strong> di menu Admin, karena alamat Mikhmon bisa dibuka siapa saja.</li>
         </ol>
         <p>Untuk menghubungkan router, Anda perlu akun VPN Remote agar Mikhmon bisa menjangkau router lewat IP VPN.</p>
         <p>Subdomain tidak bisa diganti setelah dipesan.</p>
