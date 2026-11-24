@@ -36,7 +36,7 @@ class ProvisioningService
         $instance->update(['status' => 'provisioning', 'last_error' => null]);
 
         try {
-            $result = $this->docker->provisionMikhmon($order->id);
+            $result = $this->docker->provisionMikhmon($order->id, $instance->mikhmon_subdomain, $instance->web_password);
 
             $instance->update([
                 'docker_container_id' => $result['container_id'],

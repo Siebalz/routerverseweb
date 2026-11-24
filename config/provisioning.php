@@ -24,5 +24,6 @@ return [
         'network' => env('DOCKER_NETWORK', 'mikhmon-net'),
         'base_domain' => env('MIKHMON_BASE_DOMAIN', 'mikhmonverse.my.id'),
         'memory_mb' => (int) env('MIKHMON_MEMORY_MB', 128),
+        'price' => (int) env('MIKHMON_PRICE', 10000),
     ],
 ];

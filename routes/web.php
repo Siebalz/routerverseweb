@@ -12,6 +12,7 @@ use App\Http\Controllers\PaymentSettingController;
 use App\Http\Controllers\LoginOtpController;
 use App\Http\Controllers\EmailVerificationController;
 use App\Http\Controllers\SecurityController;
+use App\Http\Controllers\HostingController;
 
 // 🔹 Halaman utama (home/landing) - ini yang tampil pertama saat web dibuka
 Route::get('/', function () {
@@ -69,6 +70,10 @@ Route::middleware(['auth', 'email.verified'])->group(function () {
     Route::get('/dashboard/poin', [PointController::class, 'index'])->name('points.index');
     Route::post('/dashboard/poin/topup', [PointController::class, 'topup'])->middleware('throttle:10,1')->name('points.topup');
     Route::get('/dashboard/server-saya', [OrderController::class, 'myServers'])->name('services.my-servers');
+
+    // Hosting Mikhmon Online: pelanggan memilih subdomain sendiri
+    Route::get('/dashboard/hosting/order', [HostingController::class, 'create'])->name('hosting.create');
+    Route::post('/dashboard/hosting', [HostingController::class, 'store'])->middleware('throttle:10,1')->name('hosting.store');
 
     // VPN Remote: daftar akun, order, kelola
     Route::get('/dashboard/vpn-remote', [VpnController::class, 'index'])->name('vpn.index');

@@ -194,3 +194,8 @@ code.addr { display: inline-block; padding: 2px 8px; border-radius: 6px; backgro
 .list .actions form { margin: 0; }
 .chips { display: flex; flex-wrap: wrap; gap: 8px; }
 
+
+/* Input subdomain dengan akhiran domain tetap */
+.suffix-input { display: flex; }
+.suffix-input .input { border-top-right-radius: 0; border-bottom-right-radius: 0; min-width: 0; flex: 1; }
+.suffix-input .suffix { display: grid; place-items: center; padding: 0 12px; border: 1.5px solid var(--line); border-left: 0; border-radius: 0 8px 8px 0; background: var(--canvas); color: var(--text-2); font-size: 0.9375rem; white-space: nowrap; }

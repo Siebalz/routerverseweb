@@ -119,4 +119,54 @@ class MikhmonProvisioningTest extends TestCase
         $this->artisan('mikhmon:sync')->assertSuccessful();
         $this->assertSame('active', $i->fresh()->status);
     }
+
+    public function test_customer_orders_with_chosen_subdomain_and_password(): void
+    {
+        $user = User::factory()->create();
+
+        $this->actingAs($user)->post(route('hosting.store'), ['subdomain' => 'Warnet01', 'password' => 'Sandi123'])
+            ->assertRedirect(route('services.my-orders'));
+
+        $i = ServerInstance::first();
+        $this->assertSame('warnet01.mikhmonverse.my.id', $i->mikhmon_subdomain);
+        $this->assertSame('Sandi123', $i->web_password);
+        $this->assertSame('pending', $i->status);
+        $this->assertSame('hosting', $i->order->category);
+        $this->assertSame($user->id, $i->order->user_id);
+    }
+
+    public function test_provisioning_uses_the_chosen_subdomain_and_password(): void
+    {
+        Http::fake([
+            '*/images/*/json' => Http::response([], 200),
+            '*/containers/mikhmon-order-*' => Http::response('', 204),
+            '*/containers/create*' => Http::response(['Id' => 'abc123'], 201),
+            '*/containers/abc123/start' => Http::response('', 204),
+        ]);
+        $this->actingAs(User::factory()->create())
+            ->post(route('hosting.store'), ['subdomain' => 'warnet01', 'password' => 'Sandi123']);
+        $order = Order::first();
+
+        $instance = app(ProvisioningService::class)->provision($order);
+
+        $this->assertSame('warnet01.mikhmonverse.my.id', $instance->mikhmon_subdomain);
+        $this->assertSame('Sandi123', $instance->web_password);
+        Http::assertSent(fn (Request $r) => str_contains($r->url(), '/containers/create')
+            && $r['Labels']["traefik.http.routers.mikhmon-order-{$order->id}.rule"] === 'Host(`warnet01.mikhmonverse.my.id`)');
+    }
+
+    public function test_taken_reserved_and_invalid_subdomains_are_rejected(): void
+    {
+        $this->actingAs(User::factory()->create())
+            ->post(route('hosting.store'), ['subdomain' => 'warnet01', 'password' => 'Sandi123']);
+
+        foreach (['warnet01', 'WARNET01', 'admin', 'abc', 'ada spasi', 'a-b-c-d'] as $bad) {
+            $this->post(route('hosting.store'), ['subdomain' => $bad, 'password' => 'Sandi123'])
+                ->assertSessionHasErrors('subdomain');
+        }
+        $this->post(route('hosting.store'), ['subdomain' => 'unik1234', 'password' => 'abc12'])
+            ->assertSessionHasErrors('password');
+
+        $this->assertSame(1, ServerInstance::count());
+    }
 }

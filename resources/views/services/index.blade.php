@@ -38,6 +38,8 @@
                     <p class="desc">{{ $item['desc'] }}</p>
                     @if ($key === 'remote_server')
                         <a class="btn btn-primary" href="{{ route('vpn.create') }}">Order VPN Remote</a>
+                    @elseif ($key === 'hosting')
+                        <a class="btn btn-primary" href="{{ route('hosting.create') }}">Order {{ $item['name'] }}</a>
                     @else
                         <button type="button" class="btn btn-primary" data-order-open data-category="{{ $key }}" data-name="{{ $item['name'] }}" data-price="{{ $item['price'] }}">Pesan {{ $item['name'] }}</button>
                     @endif

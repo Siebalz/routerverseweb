@@ -47,9 +47,10 @@ sudo ip route add 11.11.11.0/24 via <IP-LAN-CHR>
 Buat permanen lewat netplan. Di pelanggan, port API router (8728) harus terbuka ke IP VPN.
 
 ## 5. Cara kerja
+- Pelanggan membuka Layanan > Order Mikhmon Online, memilih subdomain (`nama.mikhmonverse.my.id`, huruf dan angka 4-24) dan sandi pembuka. Alamat langsung dipesan, tidak bisa dipakai orang lain.
 - Admin mengaktifkan pesanan atau pelanggan bayar dengan poin, antrean `ProvisionOrderJob` membuat container.
 - Pelanggan melihat alamat dan login pertama di halaman Kelola VPN. Login ini dari Traefik (basic auth),
-  karena Mikhmon bawaan memakai `mikhmon / 1234`. Setelah itu pelanggan ganti login Mikhmon sendiri.
+  dengan username `pelanggan` dan sandi pilihan pelanggan, karena Mikhmon bawaan memakai `mikhmon / 1234`. Setelah itu pelanggan ganti login Mikhmon sendiri.
 - `php artisan mikhmon:sync` (dijadwalkan tiap 5 menit) menghentikan container yang masa aktifnya habis
   dan menyalakannya lagi setelah diperpanjang. Data tidak dihapus.
 

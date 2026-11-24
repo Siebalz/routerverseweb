@@ -30,7 +30,7 @@
     ];
 
     $hosting = [
-        ['Mikhmon Online', 'mikhmonwhite.PNG', 183, 193, 10000, ['Akses Mikhmon Online 24/7', 'Remote dashboard dari mana saja', 'Kelola hotspot dan voucher', 'Dapat VPN port API']],
+        ['Mikhmon Online', 'mikhmonwhite.PNG', 183, 193, config('provisioning.docker.price'), ['Akses Mikhmon Online 24/7', 'Remote dashboard dari mana saja', 'Kelola hotspot dan voucher', 'Dapat VPN port API']],
     ];
 
     $rp = fn ($n) => 'Rp '.number_format($n, 0, ',', '.');

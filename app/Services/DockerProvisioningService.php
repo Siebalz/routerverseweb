@@ -62,15 +62,15 @@ class DockerProvisioningService
      * Buat dan jalankan container Mikhmon untuk 1 pesanan.
      * Return: container_id, container_name, subdomain, web_user, web_password.
      */
-    public function provisionMikhmon(int $orderId): array
+    public function provisionMikhmon(int $orderId, ?string $host = null, ?string $password = null): array
     {
         $cfg = config('provisioning.docker');
         $name = self::containerName($orderId);
-        $subdomain = "order{$orderId}.{$cfg['base_domain']}";
+        $subdomain = $host ?: "order{$orderId}.{$cfg['base_domain']}";
 
         // Pintu pertama: Mikhmon bawaan memakai login mikhmon/1234 yang sudah diketahui umum,
         // jadi alamatnya dikunci dulu dengan login dari Traefik sampai pelanggan menggantinya.
-        $webPassword = Str::password(14, symbols: false);
+        $webPassword = $password ?: Str::password(14, symbols: false);
         $hash = password_hash($webPassword, PASSWORD_BCRYPT);
 
         $this->ensureImage($cfg['mikhmon_image']);

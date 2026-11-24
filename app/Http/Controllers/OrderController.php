@@ -33,7 +33,7 @@ class OrderController extends Controller
                 'icon' => 'bi-server',
                 'color' => '#00c2a8',
                 'items' => [
-                    ['name' => 'Mikhmon Online', 'amount' => 10000, 'price' => 'Rp 10.000 / bulan', 'desc' => 'Akses 24/7, Remote Dashboard, Manage Hotspot & Voucheran, VPN Port API'],
+                    ['name' => 'Mikhmon Online', 'amount' => config('provisioning.docker.price'), 'price' => 'Rp '.number_format(config('provisioning.docker.price'), 0, ',', '.').' / bulan', 'desc' => 'Akses 24/7, Remote Dashboard, Manage Hotspot & Voucheran, VPN Port API'],
                 ],
             ],
             'network_setting' => [
