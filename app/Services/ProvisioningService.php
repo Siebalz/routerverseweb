@@ -57,6 +57,39 @@ class ProvisioningService
         return $instance;
     }
 
+    /** Pesanan tidak aktif lagi (expired/dibatalkan): hentikan container sekarang, jangan menunggu penjadwal. */
+    public function suspend(Order $order): void
+    {
+        $instance = ServerInstance::where('order_id', $order->id)->where('status', 'active')->first();
+        if (! $instance || ! $instance->docker_container_name) {
+            return;
+        }
+
+        try {
+            $this->docker->stop($instance->docker_container_name);
+            $instance->update(['status' => 'suspended']);
+        } catch (Throwable $e) {
+            // Gagal sekarang: mikhmon:sync mencoba lagi tiap 5 menit.
+            $instance->update(['last_error' => $e->getMessage()]);
+        }
+    }
+
+    /** Pesanan aktif lagi (diperpanjang): nyalakan container yang sempat dihentikan. */
+    public function resume(Order $order): void
+    {
+        $instance = ServerInstance::where('order_id', $order->id)->where('status', 'suspended')->first();
+        if (! $instance || ! $instance->docker_container_name) {
+            return;
+        }
+
+        try {
+            $this->docker->start($instance->docker_container_name);
+            $instance->update(['status' => 'active', 'last_error' => null]);
+        } catch (Throwable $e) {
+            $instance->update(['last_error' => $e->getMessage()]);
+        }
+    }
+
     /** Container siap: pesanan yang tadinya "diproses" otomatis menjadi "selesai". */
     protected function markDone(Order $order): void
     {

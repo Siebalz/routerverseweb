@@ -35,6 +35,12 @@ return [
         'secret_key' => env('TURNSTILE_SECRET_KEY'),
     ],
 
+    'business' => [
+        // Alamat usaha lengkap, tampil di beranda dan footer (juga diminta Duitku).
+        'address' => env('BUSINESS_ADDRESS', 'Dayeuhkolot, Kab. Bandung'),
+        'email' => env('BUSINESS_EMAIL', 'iqbalrinaldi098@gmail.com'),
+    ],
+
     'whatsapp' => [
         // Nomor admin untuk pesan dan konfirmasi pembayaran (format internasional tanpa +)
         'number' => env('WHATSAPP_NUMBER', '6285173484715'),

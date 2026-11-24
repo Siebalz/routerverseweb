@@ -20,7 +20,11 @@ class SyncMikhmon extends Command
         ServerInstance::with('order')->whereIn('status', ['active', 'suspended'])
             ->whereNotNull('docker_container_name')->get()
             ->each(function (ServerInstance $i) use ($docker, &$failed) {
-                $expired = $i->order && $i->order->expired_at && $i->order->expired_at->isPast();
+                $o = $i->order;
+                // Tidak boleh jalan bila pesanan tidak aktif (expired, dibatalkan, pending) atau masa aktifnya lewat.
+                $expired = ! $o
+                    || ! in_array($o->status, \App\Models\Order::ACTIVE_STATUSES, true)
+                    || ($o->expired_at && $o->expired_at->isPast());
 
                 try {
                     if ($expired && $i->status === 'active') {

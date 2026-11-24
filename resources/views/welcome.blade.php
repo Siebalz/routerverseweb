@@ -10,10 +10,10 @@
     $pesanLabel = auth()->check() ? 'Pesan di Dashboard' : 'Daftar untuk Memesan';
 
     $layanan = [
-        ['Load Balance',  'Bagi beban ISP otomatis agar koneksi tetap stabil saat trafik tinggi.'],
-        ['PPPoE Server',  'Setup PPPoE untuk manajemen pelanggan bulanan dengan limit per user.'],
-        ['Hotspot',       'Konfigurasi hotspot voucher dengan halaman login custom dan integrasi Mikhmon.'],
-        ['Pisah Trafik',  'Pisah trafik game, streaming, dan browsing agar bandwidth terpakai efisien.'],
+        ['Load Balance',  'Bagi beban ISP otomatis agar koneksi tetap stabil saat trafik tinggi.', 50000],
+        ['PPPoE Server',  'Setup PPPoE untuk manajemen pelanggan bulanan dengan limit per user.', 50000],
+        ['Hotspot',       'Konfigurasi hotspot voucher dengan halaman login custom dan integrasi Mikhmon.', 50000],
+        ['Pisah Trafik',  'Pisah trafik game, streaming, dan browsing agar bandwidth terpakai efisien.', 50000],
     ];
 
     $merek = [
@@ -73,10 +73,11 @@
             <a class="btn btn-primary" href="{{ $waLink('Halo Routerverse, saya mau tanya setting jaringan.') }}" target="_blank" rel="noopener">Tanya Setting Jaringan</a>
         </div>
         <ul class="rows">
-            @foreach ($layanan as [$judul, $isi])
+            @foreach ($layanan as [$judul, $isi, $mulai])
                 <li>
                     <h3>{{ $judul }}</h3>
                     <p>{{ $isi }}</p>
+                    <p class="price price-amber" style="justify-self:start">Mulai {{ $rp($mulai) }} <small>sekali setting</small></p>
                 </li>
             @endforeach
         </ul>
@@ -233,8 +234,8 @@
         <ul class="rows contact">
             <li><span class="label">WhatsApp</span><a href="https://wa.me/{{ $wa }}" target="_blank" rel="noopener">+62 851-7384-4715</a></li>
             <li><span class="label">Instagram</span><a href="https://instagram.com/routerverse.id" target="_blank" rel="noopener">@routerverse.id</a></li>
-            <li><span class="label">Email</span><a href="mailto:iqbalrinaldi098@gmail.com">iqbalrinaldi098@gmail.com</a></li>
-            <li><span class="label">Alamat</span><a href="https://maps.app.goo.gl/JyRA4M7y44UbFyL69" target="_blank" rel="noopener">Dayeuhkolot, Kab. Bandung</a></li>
+            <li><span class="label">Email</span><a href="mailto:{{ config('services.business.email') }}">{{ config('services.business.email') }}</a></li>
+            <li><span class="label">Alamat</span><a href="https://maps.app.goo.gl/JyRA4M7y44UbFyL69" target="_blank" rel="noopener">{{ config('services.business.address') }}</a></li>
             <li><span class="label">Status server</span><a href="https://kuma.routerverse.id/status/routerverse" target="_blank" rel="noopener">kuma.routerverse.id</a></li>
         </ul>
     </div>

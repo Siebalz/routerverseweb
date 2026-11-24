@@ -70,7 +70,8 @@
                 <img src="{{ asset('image/logo_putih_sm.png') }}" width="40" height="16" alt="">
                 Routerverse
             </a>
-            <p style="margin-top:12px;max-width:44ch">Setting jaringan, remote server, dan hosting. Dayeuhkolot, Kab. Bandung.</p>
+            <p style="margin-top:12px;max-width:44ch">Setting jaringan, remote server, dan hosting.</p>
+            <address style="margin-top:8px;max-width:44ch;font-style:normal">{{ config('services.business.address') }}<br><a href="mailto:{{ config('services.business.email') }}">{{ config('services.business.email') }}</a></address>
         </div>
         <nav class="foot-links" aria-label="Tautan footer">
             <a href="{{ route('products.index') }}">Template Voucher</a>

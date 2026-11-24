@@ -203,4 +203,66 @@ class MikhmonProvisioningTest extends TestCase
                 && ! array_key_exists("traefik.http.middlewares.{$n}-auth.basicauth.users", $labels);
         });
     }
+
+    protected function activeInstance(Order $order): ServerInstance
+    {
+        $order->update(['status' => 'selesai', 'expired_at' => now()->addDays(10)]);
+
+        return ServerInstance::create([
+            'order_id' => $order->id, 'status' => 'active', 'docker_container_name' => 'mikhmon-order-'.$order->id,
+        ]);
+    }
+
+    public function test_admin_setting_status_to_expired_stops_container_at_once(): void
+    {
+        Http::fake(['*' => Http::response('', 204)]);
+        $order = $this->order();
+        $i = $this->activeInstance($order);
+        $admin = User::factory()->create(['role' => 'admin']);
+
+        $this->actingAs($admin)->patch(route('services.update-status', $order), ['status' => 'expired'])->assertRedirect();
+
+        $this->assertSame('suspended', $i->fresh()->status);
+        Http::assertSent(fn (Request $r) => str_contains($r->url(), '/containers/mikhmon-order-'.$order->id.'/stop'));
+    }
+
+    public function test_orders_expire_command_stops_the_container(): void
+    {
+        Http::fake(['*' => Http::response('', 204)]);
+        $order = $this->order();
+        $i = $this->activeInstance($order);
+        $order->update(['expired_at' => now()->subHour()]);
+
+        $this->artisan('orders:expire')->assertSuccessful();
+
+        $this->assertSame('expired', $order->fresh()->status);
+        $this->assertSame('suspended', $i->fresh()->status);
+    }
+
+    public function test_sync_stops_container_when_status_is_not_active_even_if_date_is_in_future(): void
+    {
+        Http::fake(['*' => Http::response('', 204)]);
+        $order = $this->order();
+        $i = $this->activeInstance($order);
+        $order->update(['status' => 'dibatalkan']);
+
+        $this->artisan('mikhmon:sync')->assertSuccessful();
+
+        $this->assertSame('suspended', $i->fresh()->status);
+    }
+
+    public function test_admin_renewal_starts_the_container_again(): void
+    {
+        Http::fake(['*' => Http::response('', 204)]);
+        $order = $this->order();
+        $i = $this->activeInstance($order);
+        $i->update(['status' => 'suspended']);
+        $order->update(['status' => 'expired', 'expired_at' => now()->subDay()]);
+        $admin = User::factory()->create(['role' => 'admin']);
+
+        $this->actingAs($admin)->post(route('services.renew', $order))->assertRedirect();
+
+        $this->assertSame('active', $i->fresh()->status);
+        $this->assertTrue($order->fresh()->expired_at->isFuture());
+    }
 }

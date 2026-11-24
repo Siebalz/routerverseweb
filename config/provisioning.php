@@ -17,7 +17,7 @@ return [
     'docker' => [
         // Portainer meneruskan Docker Engine API di /api/endpoints/{id}/docker.
         // Isi DOCKER_API_KEY dengan access token Portainer (diawali ptr_).
-        'api_url' => env('DOCKER_API_URL', 'http://192.168.5.45:9000/api/endpoints/3/docker'),
+        'api_url' => env('DOCKER_API_URL', 'http://192.168.5.45:4500/api/endpoints/2/docker'),
         'api_key' => env('DOCKER_API_KEY'),
         'verify' => (bool) env('DOCKER_API_VERIFY', false),
         'mikhmon_image' => env('MIKHMON_IMAGE', 'animegasan/mikhmon:v3-latest'),

@@ -128,7 +128,7 @@ class OrderController extends Controller
     /**
      * Khusus admin: update status pesanan.
      */
-    public function updateStatus(Request $request, Order $order, OrderActivator $activator)
+    public function updateStatus(Request $request, Order $order, OrderActivator $activator, \App\Services\ProvisioningService $provisioning)
     {
         $request->validate([
             'status' => 'required|in:pending,diproses,selesai,dibatalkan,expired',
@@ -141,6 +141,8 @@ class OrderController extends Controller
         } else {
             $order->status = $request->status;
             $order->save();
+            // Mikhmon milik pesanan ini langsung dihentikan, tidak menunggu penjadwal.
+            $provisioning->suspend($order);
         }
 
         return $vpnError
@@ -173,9 +175,10 @@ class OrderController extends Controller
      * Khusus admin: perpanjang masa aktif layanan 1 bulan dari sekarang
      * (atau dari tanggal expired sebelumnya jika belum lewat).
      */
-    public function renew(Order $order, OrderActivator $activator)
+    public function renew(Order $order, OrderActivator $activator, \App\Services\ProvisioningService $provisioning)
     {
         $order->renewForOneMonth();
+        $provisioning->resume($order);
 
         $vpnError = $activator->applyVpn($order);
 
