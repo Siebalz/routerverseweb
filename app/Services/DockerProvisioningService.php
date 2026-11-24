@@ -69,7 +69,7 @@ class DockerProvisioningService
         $subdomain = $host ?: "order{$orderId}.{$cfg['base_domain']}";
 
         // Kotak login Traefik hanya bila diaktifkan (MIKHMON_GATE=true).
-        $gate = (bool) $cfg['gate'];
+        $gate = (bool) ($cfg['gate'] ?? false);
         $webPassword = $gate ? ($password ?: Str::password(14, symbols: false)) : null;
 
         $this->ensureImage($cfg['mikhmon_image']);
