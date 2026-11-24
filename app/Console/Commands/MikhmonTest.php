@@ -12,7 +12,7 @@ use Throwable;
 
 class MikhmonTest extends Command
 {
-    protected $signature = 'mikhmon:test {order? : ID pesanan Mikhmon yang ingin dibuat sekarang, tanpa antrean}';
+    protected $signature = 'mikhmon:test {order? : ID pesanan Mikhmon yang ingin dibuat sekarang, tanpa antrean} {--fresh : buat ulang container walau sudah aktif (data Mikhmon di dalamnya hilang)}';
 
     protected $description = 'Periksa koneksi ke Portainer/Docker dan (opsional) buat container untuk satu pesanan';
 
@@ -51,6 +51,9 @@ class MikhmonTest extends Command
 
         if ($id = $this->argument('order')) {
             try {
+                if ($this->option('fresh')) {
+                    ServerInstance::where('order_id', $id)->update(['status' => 'pending']);
+                }
                 $i = $provisioning->provision(Order::findOrFail($id));
                 $this->info("Berhasil: {$i->docker_container_name} -> https://{$i->mikhmon_subdomain}");
             } catch (Throwable $e) {

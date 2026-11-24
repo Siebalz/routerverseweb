@@ -20,7 +20,7 @@ return [
         'api_url' => env('DOCKER_API_URL', 'http://192.168.5.45:4500/api/endpoints/2/docker'),
         'api_key' => env('DOCKER_API_KEY'),
         'verify' => (bool) env('DOCKER_API_VERIFY', false),
-        'mikhmon_image' => env('MIKHMON_IMAGE', 'animegasan/mikhmon:latest'),
+        'mikhmon_image' => env('MIKHMON_IMAGE', 'animegasan/mikhmon:v3-latest'),
         'network' => env('DOCKER_NETWORK', 'mikhmon-net'),
         'base_domain' => env('MIKHMON_BASE_DOMAIN', 'mikhmonverse.my.id'),
         'memory_mb' => (int) env('MIKHMON_MEMORY_MB', 128),
