@@ -52,6 +52,7 @@ class MikhmonProvisioningTest extends TestCase
         $instance = app(ProvisioningService::class)->provision($order);
 
         $this->assertSame('active', $instance->status);
+        $this->assertSame('selesai', $order->fresh()->status);
         $this->assertSame("order{$order->id}.mikhmonverse.my.id", $instance->mikhmon_subdomain);
         $this->assertNotEmpty($instance->web_password);
         $this->assertNotSame($instance->web_password, $instance->getRawOriginal('web_password'));
@@ -85,7 +86,7 @@ class MikhmonProvisioningTest extends TestCase
         app(ProvisioningService::class)->provision($this->order());
 
         Http::assertSent(fn (Request $r) => str_contains($r->url(), '/images/create')
-            && str_contains($r->url(), 'fromImage=animegasan%2Fmikhmon') && str_contains($r->url(), 'tag=latest'));
+            && str_contains($r->url(), 'fromImage=animegasan%2Fmikhmon') && str_contains($r->url(), 'tag=v3-latest'));
     }
 
     public function test_failure_is_recorded_and_rethrown(): void

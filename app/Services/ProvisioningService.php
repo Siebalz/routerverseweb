@@ -29,6 +29,7 @@ class ProvisioningService
         if ($instance->status === 'suspended' && $instance->docker_container_name) {
             $this->docker->start($instance->docker_container_name);
             $instance->update(['status' => 'active', 'last_error' => null]);
+            $this->markDone($order);
 
             return $instance;
         }
@@ -47,12 +48,21 @@ class ProvisioningService
                 'status' => 'active',
                 'provisioned_at' => now(),
             ]);
+            $this->markDone($order);
         } catch (Throwable $e) {
             $instance->update(['status' => 'failed', 'last_error' => $e->getMessage()]);
             throw $e;
         }
 
         return $instance;
+    }
+
+    /** Container siap: pesanan yang tadinya "diproses" otomatis menjadi "selesai". */
+    protected function markDone(Order $order): void
+    {
+        if ($order->status === 'diproses') {
+            $order->update(['status' => 'selesai']);
+        }
     }
 
     public function terminate(ServerInstance $instance): void
